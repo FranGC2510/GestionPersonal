@@ -7,5 +7,7 @@ module org.dam.fcojavier.gestionpersonal {
 
 
     opens org.dam.fcojavier.gestionpersonal to javafx.fxml;
+    opens org.dam.fcojavier.gestionpersonal.bbdd to java.xml.bind;
+
     exports org.dam.fcojavier.gestionpersonal;
 }

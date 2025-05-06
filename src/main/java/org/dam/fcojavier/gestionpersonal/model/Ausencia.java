@@ -1,5 +1,7 @@
 package org.dam.fcojavier.gestionpersonal.model;
 
+import org.dam.fcojavier.gestionpersonal.enums.EstadoAusencia;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;

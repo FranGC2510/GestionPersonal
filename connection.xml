@@ -2,7 +2,7 @@
 <connection>
     <server>localhost</server>
     <port>3336</port>
-    <dataBase>gestion_personal</dataBase>
+    <dataBase>gestion_plantillas</dataBase>
     <user>root</user>
     <password></password>
 </connection>

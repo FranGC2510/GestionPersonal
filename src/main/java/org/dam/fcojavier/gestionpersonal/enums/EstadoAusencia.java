@@ -1,4 +1,4 @@
-package org.dam.fcojavier.gestionpersonal.model;
+package org.dam.fcojavier.gestionpersonal.enums;
 
 /**
  * Estados posibles de una ausencia
