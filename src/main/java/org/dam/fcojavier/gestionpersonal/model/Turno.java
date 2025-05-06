@@ -1,0 +1,87 @@
+package org.dam.fcojavier.gestionpersonal.model;
+
+import java.time.LocalTime;
+
+public class Turno {
+    private int idTurno;
+    private String descripcion;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
+    private Encargado creador;
+
+    public Turno() {
+    }
+
+    public Turno(String descripcion, LocalTime horaInicio, LocalTime horaFin, Encargado creador) {
+        this.descripcion = descripcion;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.creador = creador;
+    }
+
+    public int getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(int idTurno) {
+        this.idTurno = idTurno;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public Encargado getCreador() {
+        return creador;
+    }
+
+    public void setCreador(Encargado creador) {
+        this.creador = creador;
+    }
+
+    /**
+     * Calcula la duración del turno en horas
+     * @return duración en horas (con decimales), o 0 si falta horaInicio o horaFin
+     */
+    public double getDuracionHoras() {
+        double duracionHoras;
+        if (horaInicio == null || horaFin == null) {
+            duracionHoras = 0.0;
+        }
+        int minutos = (horaFin.getHour() * 60 + horaFin.getMinute()) -
+                (horaInicio.getHour() * 60 + horaInicio.getMinute());
+        duracionHoras = minutos / 60.0;
+        return duracionHoras;
+    }
+
+    @Override
+    public String toString() {
+        return "Turno{" +
+                "idTurno=" + idTurno +
+                ", descripcion='" + descripcion + '\'' +
+                ", horaInicio=" + horaInicio +
+                ", horaFin=" + horaFin +
+                ", creador=" + (creador != null ? creador.getIdUsuario() : "null") +
+                '}';
+    }
+}
