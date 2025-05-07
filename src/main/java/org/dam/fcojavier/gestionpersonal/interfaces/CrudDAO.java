@@ -38,14 +38,14 @@ public interface CrudDAO<T> {
     boolean delete(T objeto) throws DAOException;
 
     /**
-     * Busca una entidad por su nombre usando lazy loading.
+     * Busca una entidad por su identificador usando lazy loading.
      * Solo carga la entidad principal sin sus relaciones.
      *
-     * @param nombre nombre de la entidad
+     * @param id identificador de la entidad
      * @return la entidad encontrada o null si no existe
      * @throws DAOException si hay error en la operación
      */
-    T findByName(String nombre) throws DAOException;
+    T findById(int id) throws DAOException;
 
     /**
      * Obtiene todas las entidades usando lazy loading.

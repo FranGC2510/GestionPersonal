@@ -46,7 +46,7 @@ public class PerteneceTurno {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PerteneceTurno that = (PerteneceTurno) o;
-        return Objects.equals(empleado.getIdUsuario(), that.empleado.getIdUsuario()) &&
+        return Objects.equals(empleado.getIdEmpleado(), that.empleado.getIdEmpleado()) &&
                 Objects.equals(turno.getIdTurno(), that.turno.getIdTurno()) &&
                 Objects.equals(fecha, that.fecha);
     }
@@ -54,7 +54,7 @@ public class PerteneceTurno {
     @Override
     public int hashCode() {
         return Objects.hash(
-                empleado != null ? empleado.getIdUsuario() : null,
+                empleado != null ? empleado.getIdEmpleado() : null,
                 turno != null ? turno.getIdTurno() : null,
                 fecha
         );
@@ -63,7 +63,7 @@ public class PerteneceTurno {
     @Override
     public String toString() {
         return "AsignacionTurno{" +
-                "empleado=" + (empleado != null ? empleado.getIdUsuario() : "null") +
+                "empleado=" + (empleado != null ? empleado.getIdEmpleado() : "null") +
                 ", turno=" + (turno != null ? turno.getIdTurno() : "null") +
                 ", fecha=" + fecha +
                 '}';

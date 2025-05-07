@@ -6,7 +6,6 @@ import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.interfaces.CrudDAO;
 import org.dam.fcojavier.gestionpersonal.model.Empresa;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,13 +15,15 @@ import java.util.List;
 public class EmpresaDAO implements CrudDAO<Empresa> {
 
     private final String insert_SQL = "INSERT INTO empresa (nombre, direccion, telefono, email, password_hash) VALUES (?, ?, ?, ?, ?)";
-    private final String update_SQL = "UPDATE empresa SET nombre = ?, direccion = ?, telefono = ?, email = ?, password_hash = ? WHERE id_Empresa = ?";
-    private final String delete_SQL = "DELETE FROM empresa WHERE id_Empresa = ?";
-    private final String findByName_SQL = "SELECT * FROM empresa WHERE nombre = ?";
+    private final String update_SQL = "UPDATE empresa SET nombre = ?, direccion = ?, telefono = ?, email = ?, password_hash = ? WHERE id_empresa = ?";
+    private final String delete_SQL = "DELETE FROM empresa WHERE id_empresa = ?";
+    private final String findById_SQL = "SELECT * FROM empresa WHERE id_empresa = ?";
     private final String findAll_SQL = "SELECT * FROM empresa";
+    private final String findByEmail_SQL = "SELECT * FROM empresa WHERE email = ?";
+
     @Override
     public Empresa insert(Empresa empresa) throws DAOException {
-        if(empresa!=null && findByName(empresa.getNombre())==null) {
+        if(empresa!=null && findByEmail(empresa.getEmail())==null) {
             try(PreparedStatement pstm=ConnectionDB.getConnection().prepareStatement(insert_SQL, PreparedStatement.RETURN_GENERATED_KEYS)){
                 pstm.setString(1, empresa.getNombre());
                 pstm.setString(2, empresa.getDireccion());
@@ -47,7 +48,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
     public Empresa update(Empresa empresa) throws DAOException {
         Empresa empresaActualizada=null;
         if(empresa != null) {
-            Empresa empresaExistente = findByName(empresa.getNombre());
+            Empresa empresaExistente = findById(empresa.getIdEmpresa());
             if(empresaExistente != null) {
                 try(PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(update_SQL)) {
                     pstm.setString(1, empresa.getNombre());
@@ -63,6 +64,8 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                 } catch (SQLException e) {
                     throw new DAOException("Error al modificar la empresa: "+e.getMessage(), DAOErrorTipo.UPDATE_ERROR);
                 }
+            }else{
+                throw new DAOException("La empresa no existe", DAOErrorTipo.NOT_FOUND);
             }
         }
         return empresaActualizada;
@@ -72,7 +75,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
     public boolean delete(Empresa empresa) throws DAOException {
         boolean deleted=false;
         if(empresa!=null){
-            Empresa empresaEncontrada=findByName(empresa.getNombre());
+            Empresa empresaEncontrada= findById(empresa.getIdEmpresa());
             if(empresaEncontrada!=null){
                 try(PreparedStatement pstm=ConnectionDB.getConnection().prepareStatement(delete_SQL)){
                     pstm.setInt(1, empresaEncontrada.getIdEmpresa());
@@ -87,15 +90,14 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
     }
 
     @Override
-    public Empresa findByName(String nombre) throws DAOException {
+    public Empresa findById(int id) throws DAOException {
         Empresa empresa = null;
-        try (Connection con = ConnectionDB.getConnection()){
-            PreparedStatement stmt=con.prepareStatement(findByName_SQL);
-            stmt.setString(1, nombre);
-            ResultSet rs=stmt.executeQuery();
+        try (PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(findById_SQL)){
+            pstm.setInt(1, id);
+            ResultSet rs=pstm.executeQuery();
             if(rs.next()){
                 empresa=new Empresa();
-                empresa.setIdEmpresa(rs.getInt("id_Empresa"));
+                empresa.setIdEmpresa(rs.getInt("id_empresa"));
                 empresa.setNombre(rs.getString("nombre"));
                 empresa.setDireccion(rs.getString("direccion"));
                 empresa.setTelefono(rs.getString("telefono"));
@@ -128,4 +130,25 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         }
         return empresas;
     }
+
+    private Empresa findByEmail(String email) throws DAOException {
+        Empresa empresa = null;
+        try (PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(findByEmail_SQL)){
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()){
+                empresa = new Empresa();
+                empresa.setIdEmpresa(rs.getInt("id_empresa"));
+                empresa.setNombre(rs.getString("nombre"));
+                empresa.setDireccion(rs.getString("direccion"));
+                empresa.setTelefono(rs.getString("telefono"));
+                empresa.setEmail(rs.getString("email"));
+                empresa.setPassword(rs.getString("password_hash"));
+            }
+        } catch (SQLException e){
+            throw new DAOException("Error al buscar la empresa por email: " + e.getMessage(), DAOErrorTipo.NOT_FOUND);
+        }
+        return empresa;
+    }
+
 }

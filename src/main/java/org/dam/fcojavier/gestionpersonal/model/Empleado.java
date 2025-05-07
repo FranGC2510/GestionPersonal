@@ -5,7 +5,7 @@ import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
 import java.util.List;
 
 public class Empleado {
-    private int idUsuario;
+    private int idEmpleado;
     private Empresa empresa;
     private String nombre;
     private String apellido;
@@ -17,6 +17,9 @@ public class Empleado {
     private String puesto;
     private TipoEmpleado rol;
     private List<Empleado> empleadosSupervisados;
+
+    public Empleado() {
+    }
 
     public Empleado(Empresa empresa, String nombre, String apellidos,
                     String telefono, String email, String passwordHash) {
@@ -31,12 +34,12 @@ public class Empleado {
         this.empleadosSupervisados=null;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
     public Empresa getEmpresa() {
@@ -111,6 +114,14 @@ public class Empleado {
         this.puesto = puesto;
     }
 
+    public TipoEmpleado getRol() {
+        return rol;
+    }
+
+    public void setRol(TipoEmpleado rol) {
+        this.rol = rol;
+    }
+
     public List<Empleado> getEmpleadosSupervisados() {
         return empleadosSupervisados;
     }
@@ -122,7 +133,7 @@ public class Empleado {
     @Override
     public String toString() {
         return "Empleado{" +
-                "idUsuario=" + idUsuario +
+                "idUsuario=" + idEmpleado +
                 ", empresa=" + (empresa != null ? empresa.getIdEmpresa() : "null") +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellido + '\'' +
