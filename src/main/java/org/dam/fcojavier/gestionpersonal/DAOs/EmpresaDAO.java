@@ -35,7 +35,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                     empresa.setIdEmpresa(rs.getInt(1));
                 }
             }catch (SQLException e){
-                throw new DAOException(e.getMessage(), DAOErrorTipo.INSERT_ERROR);
+                throw new DAOException("Error al insertar la empresa: "+e.getMessage(), DAOErrorTipo.INSERT_ERROR);
             }
         }else{
             empresa=null;
@@ -61,7 +61,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                         empresaActualizada = empresa;
                     }
                 } catch (SQLException e) {
-                    throw new DAOException(e.getMessage(), DAOErrorTipo.UPDATE_ERROR);
+                    throw new DAOException("Error al modificar la empresa: "+e.getMessage(), DAOErrorTipo.UPDATE_ERROR);
                 }
             }
         }
@@ -79,7 +79,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                     pstm.executeUpdate();
                     deleted=true;
                 }catch (SQLException e){
-                    throw new DAOException(e.getMessage(), DAOErrorTipo.DELETE_ERROR);
+                    throw new DAOException("Error al borrar la empresa: "+e.getMessage(), DAOErrorTipo.DELETE_ERROR);
                 }
             }
         }
@@ -89,8 +89,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
     @Override
     public Empresa findByName(String nombre) throws DAOException {
         Empresa empresa = null;
-        Connection con = ConnectionDB.getConnection();
-        try{
+        try (Connection con = ConnectionDB.getConnection()){
             PreparedStatement stmt=con.prepareStatement(findByName_SQL);
             stmt.setString(1, nombre);
             ResultSet rs=stmt.executeQuery();
@@ -104,7 +103,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                 empresa.setPassword(rs.getString("password_hash"));
             }
         }catch (SQLException e){
-            throw new DAOException(e.getMessage(), DAOErrorTipo.NOT_FOUND);
+            throw new DAOException("Error al buscar la empresa: "+e.getMessage(), DAOErrorTipo.NOT_FOUND);
         }
         return empresa;
     }
@@ -125,7 +124,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
                 empresas.add(empresa);
             }
         }catch (SQLException e){
-            throw new DAOException(e.getMessage(), DAOErrorTipo.NOT_FOUND);
+            throw new DAOException("Error al listar las empresas: "+e.getMessage(), DAOErrorTipo.NOT_FOUND);
         }
         return empresas;
     }

@@ -7,16 +7,14 @@ public class Turno {
     private String descripcion;
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private Encargado creador;
 
     public Turno() {
     }
 
-    public Turno(String descripcion, LocalTime horaInicio, LocalTime horaFin, Encargado creador) {
+    public Turno(String descripcion, LocalTime horaInicio, LocalTime horaFin) {
         this.descripcion = descripcion;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.creador = creador;
     }
 
     public int getIdTurno() {
@@ -51,14 +49,6 @@ public class Turno {
         this.horaFin = horaFin;
     }
 
-    public Encargado getCreador() {
-        return creador;
-    }
-
-    public void setCreador(Encargado creador) {
-        this.creador = creador;
-    }
-
     /**
      * Calcula la duración del turno en horas
      * @return duración en horas (con decimales), o 0 si falta horaInicio o horaFin
@@ -81,7 +71,6 @@ public class Turno {
                 ", descripcion='" + descripcion + '\'' +
                 ", horaInicio=" + horaInicio +
                 ", horaFin=" + horaFin +
-                ", creador=" + (creador != null ? creador.getIdUsuario() : "null") +
                 '}';
     }
 }

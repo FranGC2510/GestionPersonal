@@ -1,81 +1,67 @@
--- 0) (Opcional) Borrar esquema previo
+-- 0) Borrar esquema anterior si existe
 DROP DATABASE IF EXISTS gestion_plantillas;
-CREATE DATABASE gestion_plantillas
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE gestion_plantillas CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE gestion_plantillas;
 
--- 1) Tabla Empresa (ahora con contraseña)
+-- 1) Tabla empresa (actualizada con dirección, email y teléfono)
 CREATE TABLE empresa (
   id_empresa     INT AUTO_INCREMENT PRIMARY KEY,
-  nombre         VARCHAR(100) NOT NULL,
-  direccion      VARCHAR(200),
-  telefono       VARCHAR(20),
-  email          VARCHAR(100),
+  nombre         VARCHAR(100) NOT NULL UNIQUE,
+  direccion      VARCHAR(255) NOT NULL,
+  email          VARCHAR(100) NOT NULL UNIQUE,
+  telefono       VARCHAR(20)  NOT NULL UNIQUE,
   password_hash  VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
--- 2) Única tabla: Empleado (incluye datos de usuario + empleado)
+-- 2) Tabla empleado (modelo unificado con rol)
 CREATE TABLE empleado (
-  id_usuario     INT AUTO_INCREMENT PRIMARY KEY,
-  id_empresa     INT         NOT NULL,
-  nombre         VARCHAR(100) NOT NULL,
-  apellidos      VARCHAR(100) NOT NULL,
-  departamento   VARCHAR(100),
-  telefono       VARCHAR(20)  NOT NULL UNIQUE,
-  email          VARCHAR(100) NOT NULL UNIQUE,
-  password_hash  VARCHAR(255) NOT NULL,
-  activo         BOOLEAN      NOT NULL DEFAULT TRUE,
-  puesto         VARCHAR(100),
+  id_usuario    INT AUTO_INCREMENT PRIMARY KEY,
+  nombre        VARCHAR(100) NOT NULL,
+  apellidos     VARCHAR(100) NOT NULL,
+  telefono      VARCHAR(20)  NOT NULL UNIQUE,
+  email         VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  activo        BOOLEAN NOT NULL DEFAULT TRUE,
+  departamento  VARCHAR(100),
+  rol           ENUM('SUPERVISOR', 'EMPLEADO') NOT NULL DEFAULT 'EMPLEADO',
+  id_empresa    INT NOT NULL,
   FOREIGN KEY (id_empresa)
     REFERENCES empresa(id_empresa)
-    ON DELETE RESTRICT
-) ENGINE=InnoDB;
-
--- 3) Relación reflexiva: supervisión entre empleados
-CREATE TABLE supervisa (
-  id_encargado INT NOT NULL,
-  id_empleado  INT NOT NULL,
-  PRIMARY KEY (id_encargado, id_empleado),
-  FOREIGN KEY (id_encargado)
-    REFERENCES empleado(id_usuario)
-    ON DELETE CASCADE,
-  FOREIGN KEY (id_empleado)
-    REFERENCES empleado(id_usuario)
     ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 4) Turnos
+-- 3) Tabla ausencia (simplificada)
+CREATE TABLE ausencia (
+  id_ausencia INT AUTO_INCREMENT PRIMARY KEY,
+  motivo      VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- 4) Tabla solicita (relación entre empleado y ausencia)
+CREATE TABLE solicita (
+  id_empleado     INT NOT NULL,
+  id_ausencia     INT NOT NULL,
+  fecha_solicitud DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  fecha_inicio    DATE NOT NULL,
+  fecha_fin       DATE NOT NULL,
+  estado          ENUM('pendiente', 'aprobada', 'rechazada') NOT NULL DEFAULT 'pendiente',
+  PRIMARY KEY (id_empleado, id_ausencia, fecha_solicitud),
+  FOREIGN KEY (id_empleado)
+    REFERENCES empleado(id_usuario)
+    ON DELETE CASCADE,
+  FOREIGN KEY (id_ausencia)
+    REFERENCES ausencia(id_ausencia)
+    ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 5) Tabla turno (sin id_creador)
 CREATE TABLE turno (
   id_turno     INT AUTO_INCREMENT PRIMARY KEY,
   descripcion  VARCHAR(100) NOT NULL,
   hora_inicio  TIME         NOT NULL,
-  hora_fin     TIME         NOT NULL,
-  id_creador   INT          NULL,
-  FOREIGN KEY (id_creador)
-    REFERENCES empleado(id_usuario)
-    ON DELETE SET NULL
+  hora_fin     TIME         NOT NULL
 ) ENGINE=InnoDB;
 
--- 5) Ausencias
-CREATE TABLE ausencia (
-  id_ausencia     INT AUTO_INCREMENT PRIMARY KEY,
-  id_empleado     INT         NOT NULL,
-  id_encargado    INT         NULL,
-  fecha_solicitud DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  fecha_inicio    DATE        NOT NULL,
-  fecha_fin       DATE        NOT NULL,
-  estado          ENUM('pendiente','aprobada','rechazada') NOT NULL DEFAULT 'pendiente',
-  motivo          VARCHAR(100),
-  FOREIGN KEY (id_empleado)
-    REFERENCES empleado(id_usuario)
-    ON DELETE CASCADE,
-  FOREIGN KEY (id_encargado)
-    REFERENCES empleado(id_usuario)
-    ON DELETE SET NULL
-) ENGINE=InnoDB;
-
--- 6) Asignación de turnos
+-- 6) Tabla pertenece (asignación de turnos a empleados)
 CREATE TABLE pertenece (
   id_empleado INT NOT NULL,
   id_turno    INT NOT NULL,
@@ -86,5 +72,20 @@ CREATE TABLE pertenece (
     ON DELETE CASCADE,
   FOREIGN KEY (id_turno)
     REFERENCES turno(id_turno)
+    ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 7) Tabla supervisa (relación reflexiva entre empleados)
+CREATE TABLE supervisa (
+  id_supervisor INT NOT NULL,
+  id_empleado   INT NOT NULL,
+  fecha_inicio  DATE NOT NULL,
+  fecha_fin     DATE,
+  PRIMARY KEY (id_supervisor, id_empleado, fecha_inicio),
+  FOREIGN KEY (id_supervisor)
+    REFERENCES empleado(id_usuario)
+    ON DELETE CASCADE,
+  FOREIGN KEY (id_empleado)
+    REFERENCES empleado(id_usuario)
     ON DELETE CASCADE
 ) ENGINE=InnoDB;

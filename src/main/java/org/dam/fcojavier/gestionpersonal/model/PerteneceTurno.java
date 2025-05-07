@@ -3,15 +3,15 @@ package org.dam.fcojavier.gestionpersonal.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class AsignacionTurno {
+public class PerteneceTurno {
     private Empleado empleado;
     private Turno turno;
     private LocalDate fecha;
 
-    public AsignacionTurno() {
+    public PerteneceTurno() {
     }
 
-    public AsignacionTurno(Empleado empleado, Turno turno, LocalDate fecha) {
+    public PerteneceTurno(Empleado empleado, Turno turno, LocalDate fecha) {
         this.empleado = empleado;
         this.turno = turno;
         this.fecha = fecha;
@@ -45,7 +45,7 @@ public class AsignacionTurno {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AsignacionTurno that = (AsignacionTurno) o;
+        PerteneceTurno that = (PerteneceTurno) o;
         return Objects.equals(empleado.getIdUsuario(), that.empleado.getIdUsuario()) &&
                 Objects.equals(turno.getIdTurno(), that.turno.getIdTurno()) &&
                 Objects.equals(fecha, that.fecha);

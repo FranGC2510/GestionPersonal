@@ -1,5 +1,9 @@
 package org.dam.fcojavier.gestionpersonal.model;
 
+import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
+
+import java.util.List;
+
 public class Empleado {
     private int idUsuario;
     private Empresa empresa;
@@ -11,6 +15,8 @@ public class Empleado {
     private String departamento;
     private boolean activo;
     private String puesto;
+    private TipoEmpleado rol;
+    private List<Empleado> empleadosSupervisados;
 
     public Empleado(Empresa empresa, String nombre, String apellidos,
                     String telefono, String email, String passwordHash) {
@@ -21,6 +27,8 @@ public class Empleado {
         this.email = email;
         this.passwordHash = passwordHash;
         this.activo = true; // Por defecto los empleados están activos
+        this.rol = TipoEmpleado.EMPLEADO;
+        this.empleadosSupervisados=null;
     }
 
     public int getIdUsuario() {
@@ -101,6 +109,14 @@ public class Empleado {
 
     public void setPuesto(String puesto) {
         this.puesto = puesto;
+    }
+
+    public List<Empleado> getEmpleadosSupervisados() {
+        return empleadosSupervisados;
+    }
+
+    public void setEmpleadosSupervisados(List<Empleado> empleadosSupervisados) {
+        this.empleadosSupervisados = empleadosSupervisados;
     }
 
     @Override
