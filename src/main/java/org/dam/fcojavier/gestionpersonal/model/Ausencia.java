@@ -6,6 +6,8 @@ public class Ausencia {
     private int idAusencia;
     private String motivo;
 
+    public Ausencia() {}
+
     /**
      * Constructor con todos los campos necesarios.
      * @param motivo Motivo de la ausencia

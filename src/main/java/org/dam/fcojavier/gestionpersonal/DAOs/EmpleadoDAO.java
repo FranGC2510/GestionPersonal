@@ -45,7 +45,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                 }
 
             }catch (SQLException e){
-                throw new DAOException(e.getMessage(), DAOErrorTipo.UNKNOWN_ERROR);
+                throw new DAOException(e.getMessage(), DAOErrorTipo.CONNECTION_ERROR);
             }
         }else{
             empleado=null;

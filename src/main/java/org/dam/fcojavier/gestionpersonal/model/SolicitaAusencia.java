@@ -10,15 +10,17 @@ public class SolicitaAusencia {
     private Empleado empleado;
     private Ausencia ausencia;
     private EstadoAusencia estado;
-    private LocalDateTime fechaSolicitud;
+    private LocalDate fechaSolicitud;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+
+    public SolicitaAusencia(){}
 
     public SolicitaAusencia(Empleado empleado, Ausencia ausencia, EstadoAusencia estado, LocalDateTime fechaSolicitud, LocalDate fechaInicio, LocalDate fechaFin) {
         this.empleado = empleado;
         this.ausencia = ausencia;
-        this.estado = EstadoAusencia.PENDIENTE;
-        this.fechaSolicitud = LocalDateTime.now();
+        this.estado = EstadoAusencia.pendiente;
+        this.fechaSolicitud = LocalDate.now();
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
@@ -47,11 +49,11 @@ public class SolicitaAusencia {
         this.estado = estado;
     }
 
-    public LocalDateTime getFechaSolicitud() {
+    public LocalDate getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(LocalDateTime fechaSolicitud) {
+    public void setFechaSolicitud(LocalDate fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 
