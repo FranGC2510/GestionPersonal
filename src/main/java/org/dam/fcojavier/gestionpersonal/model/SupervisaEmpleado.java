@@ -8,6 +8,8 @@ public class SupervisaEmpleado {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
+    public SupervisaEmpleado(){}
+
     public SupervisaEmpleado(Empleado supervisor, Empleado empleado, LocalDate fechaInicio) {
         this.supervisor = supervisor;
         this.empleado = empleado;

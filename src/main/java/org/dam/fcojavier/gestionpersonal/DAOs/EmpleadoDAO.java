@@ -6,9 +6,7 @@ import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.interfaces.CrudDAO;
 import org.dam.fcojavier.gestionpersonal.model.Empleado;
-import org.dam.fcojavier.gestionpersonal.model.Empresa;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +20,6 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
     private final String findById_SQL = "SELECT * FROM empleado WHERE id_empleado = ?";
     private final String findAll_SQL = "SELECT * FROM empleado";
     private final String findByEmail_SQL = "SELECT * FROM empleado WHERE email = ?";
-
-
-    private final String insert_supervision_SQL = "INSERT INTO supervisa (id_supervisor, id_empleado) VALUES (?, ?)";
-    private final String delete_supervision_SQL = "DELETE FROM supervisa WHERE id_supervisor = ? AND id_empleado = ?";
 
     @Override
     public Empleado insert(Empleado empleado) throws DAOException {

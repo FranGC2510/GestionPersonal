@@ -16,7 +16,6 @@ public class Empleado {
     private boolean activo;
     private String puesto;
     private TipoEmpleado rol;
-    private List<Empleado> empleadosSupervisados;
 
     public Empleado() {
     }
@@ -31,7 +30,6 @@ public class Empleado {
         this.passwordHash = passwordHash;
         this.activo = true; // Por defecto los empleados están activos
         this.rol = TipoEmpleado.EMPLEADO;
-        this.empleadosSupervisados=null;
     }
 
     public int getIdEmpleado() {
@@ -120,14 +118,6 @@ public class Empleado {
 
     public void setRol(TipoEmpleado rol) {
         this.rol = rol;
-    }
-
-    public List<Empleado> getEmpleadosSupervisados() {
-        return empleadosSupervisados;
-    }
-
-    public void setEmpleadosSupervisados(List<Empleado> empleadosSupervisados) {
-        this.empleadosSupervisados = empleadosSupervisados;
     }
 
     @Override
