@@ -157,7 +157,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleados;
     }
 
-    private Empleado findByEmail(String email) throws DAOException {
+    public Empleado findByEmail(String email) throws DAOException {
         Empleado empleado = null;
         EmpresaDAO empresaDAO = new EmpresaDAO();
 

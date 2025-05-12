@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<DialogPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.dam.fcojavier.gestionpersonal.controllers.RegistroController"
+            prefWidth="400"
+            minHeight="400">
+    <content>
+        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20;" prefWidth="380" prefHeight="380" minHeight="380">
+            <!-- Título -->
+            <Text text="Registro"
+                  style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <!-- Campos comunes -->
+        <TextField fx:id="emailField"
+                   promptText="Email"
+                   style="-fx-pref-width: 300;"/>
+
+        <PasswordField fx:id="passwordField"
+                       promptText="Contraseña"
+                       style="-fx-pref-width: 300;"/>
+
+        <PasswordField fx:id="confirmPasswordField"
+                       promptText="Confirmar contraseña"
+                       style="-fx-pref-width: 300;"/>
+
+        <!-- Campos de empresa -->
+        <TextField fx:id="nombreEmpresaField"
+                   promptText="Nombre de la empresa"
+                   style="-fx-pref-width: 300;"/>
+        <TextField fx:id="direccionEmpresaField"
+                   promptText="Dirección"
+                   style="-fx-pref-width: 300;"/>
+        <TextField fx:id="telefonoEmpresaField"
+                   promptText="Teléfono"
+                   style="-fx-pref-width: 300;"/>
+
+        <!-- Mensaje de error -->
+        <Label fx:id="mensajeError"
+               style="-fx-text-fill: red; -fx-pref-width: 300;"
+               visible="false"
+               wrapText="true"/>
+        </VBox>
+    </content>
+</DialogPane>

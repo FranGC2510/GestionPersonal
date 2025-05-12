@@ -90,7 +90,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.dam.fcojavier.gestionpersonal/org.dam.fcojavier.gestionpersonal.HelloApplication
+                                org.dam.fcojavier.gestionpersonal/org.dam.fcojavier.gestionpersonal.GestionPersonalApp
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

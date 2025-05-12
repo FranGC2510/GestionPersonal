@@ -131,7 +131,7 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return empresas;
     }
 
-    private Empresa findByEmail(String email) throws DAOException {
+    public Empresa findByEmail(String email) throws DAOException {
         Empresa empresa = null;
         try (PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(findByEmail_SQL)){
             pstm.setString(1, email);
