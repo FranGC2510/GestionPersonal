@@ -57,10 +57,12 @@ public class Turno {
         double duracionHoras;
         if (horaInicio == null || horaFin == null) {
             duracionHoras = 0.0;
+        }else{
+            int minutos = (horaFin.getHour() * 60 + horaFin.getMinute()) -
+                    (horaInicio.getHour() * 60 + horaInicio.getMinute());
+            duracionHoras = minutos / 60.0;
         }
-        int minutos = (horaFin.getHour() * 60 + horaFin.getMinute()) -
-                (horaInicio.getHour() * 60 + horaInicio.getMinute());
-        duracionHoras = minutos / 60.0;
+
         return duracionHoras;
     }
 
