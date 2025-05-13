@@ -130,7 +130,24 @@ public class EmpresaController {
 
     @FXML
     private void handleGestionAusencias() {
-        // TODO: Implementar la gestión de ausencias
+        try {
+            FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("gestion-ausencias-view.fxml"));
+            Scene scene = new Scene(loader.load());
+        
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Ausencias");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(empresaNombreText.getScene().getWindow());
+            stage.setScene(scene);
+        
+            stage.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error al abrir la gestión de ausencias");
+            alert.setContentText("Ha ocurrido un error al intentar abrir la ventana.");
+            alert.showAndWait();
+        }
     }
 
     @FXML

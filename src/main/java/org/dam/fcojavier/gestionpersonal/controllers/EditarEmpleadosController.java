@@ -83,7 +83,7 @@ public class EditarEmpleadosController {
             telefonoField.setText(empleado.getTelefono());
             emailField.setText(empleado.getEmail());
             rolComboBox.setValue(empleado.getRol());
-            activoCheckBox.setSelected(empleado.isActivo());
+            activoCheckBox.setSelected(empleado.getActivo());
         }
     }
 

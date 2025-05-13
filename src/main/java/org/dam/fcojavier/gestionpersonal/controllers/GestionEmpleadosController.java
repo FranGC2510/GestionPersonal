@@ -148,8 +148,8 @@ public class GestionEmpleadosController {
                 case "Departamento (A-Z)" -> empleados.sort(Comparator.comparing(Empleado::getDepartamento));
                 case "Departamento (Z-A)" -> empleados.sort(Comparator.comparing(Empleado::getDepartamento).reversed());
                 case "Rol" -> empleados.sort(Comparator.comparing(Empleado::getRol));
-                case "Estado (Activos primero)" -> empleados.sort(Comparator.comparing(Empleado::isActivo).reversed());
-                case "Estado (Inactivos primero)" -> empleados.sort(Comparator.comparing(Empleado::isActivo));
+                case "Estado (Activos primero)" -> empleados.sort(Comparator.comparing(Empleado::getActivo).reversed());
+                case "Estado (Inactivos primero)" -> empleados.sort(Comparator.comparing(Empleado::getActivo));
             }
         }
     }

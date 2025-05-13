@@ -14,8 +14,8 @@ import java.util.List;
 
 public class EmpleadoDAO implements CrudDAO<Empleado> {
 
-    private final String insert_SQL = "INSERT INTO empleado (id_empresa, nombre, apellidos, departamento, telefono, email, puesto, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String update_SQL = "UPDATE empleado SET id_empresa = ?, nombre = ?, apellidos = ?, departamento = ?, telefono = ?, email = ?, puesto = ?, rol = ? WHERE id_empleado = ?";
+    private final String insert_SQL = "INSERT INTO empleado (id_empresa, nombre, apellidos, departamento, telefono, email, puesto, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String update_SQL = "UPDATE empleado SET id_empresa = ?, nombre = ?, apellidos = ?, telefono = ?, email = ?, activo = ?, departamento = ?, rol = ? WHERE id_empleado = ?";
     private final String delete_SQL = "DELETE FROM empleado WHERE id_empleado = ?";
     private final String findById_SQL = "SELECT * FROM empleado WHERE id_empleado = ?";
     private final String findAll_SQL = "SELECT * FROM empleado";
@@ -28,11 +28,12 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                 pstm.setInt(1, empleado.getEmpresa().getIdEmpresa());
                 pstm.setString(2, empleado.getNombre());
                 pstm.setString(3, empleado.getApellido());
-                pstm.setString(4,empleado.getDepartamento());
-                pstm.setString(5,empleado.getTelefono());
-                pstm.setString(6,empleado.getEmail());
-                pstm.setString(7,empleado.getPuesto());
+                pstm.setString(4, empleado.getDepartamento());
+                pstm.setString(5, empleado.getTelefono());
+                pstm.setString(6, empleado.getEmail());
+                pstm.setString(7, empleado.getPuesto());
                 pstm.setString(8, empleado.getRol().name());
+                pstm.setBoolean(9, empleado.getActivo());
 
                 if (pstm.executeUpdate() == 0) {
                     throw new DAOException("Error al crear el empleado", DAOErrorTipo.INSERT_ERROR);
@@ -54,28 +55,28 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
 
     @Override
     public Empleado update(Empleado empleado) throws DAOException {
-        Empleado empleadoActualizado=null;
+        Empleado empleadoActualizado = null;
         if(empleado != null) {
             Empleado empleadoExistente = findById(empleado.getIdEmpleado());
             if(empleadoExistente != null) {
-                try(PreparedStatement pstm=ConnectionDB.getConnection().prepareStatement(update_SQL)){
+                try(PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(update_SQL)) {
                     pstm.setInt(1, empleado.getEmpresa().getIdEmpresa());
                     pstm.setString(2, empleado.getNombre());
                     pstm.setString(3, empleado.getApellido());
-                    pstm.setString(4,empleado.getDepartamento());
-                    pstm.setString(5,empleado.getTelefono());
-                    pstm.setString(6,empleado.getEmail());
-                    pstm.setString(7,empleado.getPuesto());
+                    pstm.setString(4, empleado.getTelefono());
+                    pstm.setString(5, empleado.getEmail());
+                    pstm.setBoolean(6, empleado.getActivo());
+                    pstm.setString(7, empleado.getDepartamento());
                     pstm.setString(8, empleado.getRol().name());
-                    pstm.setInt(9,empleadoExistente.getIdEmpleado());
+                    pstm.setInt(9, empleadoExistente.getIdEmpleado());
 
                     if(pstm.executeUpdate() > 0) {
                         empleadoActualizado = empleado;
                     }
-                }catch (SQLException e){
-                    throw new DAOException("Error al modificar el empleado: "+e.getMessage(), DAOErrorTipo.UPDATE_ERROR);
+                } catch (SQLException e) {
+                    throw new DAOException("Error al modificar el empleado: " + e.getMessage(), DAOErrorTipo.UPDATE_ERROR);
                 }
-            }else{
+            } else {
                 throw new DAOException("El empleado no existe", DAOErrorTipo.NOT_FOUND);
             }
         }
@@ -118,6 +119,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                     empleado.setTelefono(rs.getString("telefono"));
                     empleado.setEmail(rs.getString("email"));
                     empleado.setPuesto(rs.getString("puesto"));
+                    empleado.setActivo(rs.getBoolean("activo"));
                     empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
                 }
             }
@@ -171,6 +173,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                     empleado.setTelefono(rs.getString("telefono"));
                     empleado.setEmail(rs.getString("email"));
                     empleado.setPuesto(rs.getString("puesto"));
+                    empleado.setActivo(rs.getBoolean("activo"));
                     empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
                 }
             }

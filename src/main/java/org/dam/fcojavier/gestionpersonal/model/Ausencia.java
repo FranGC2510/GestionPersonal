@@ -1,10 +1,15 @@
 package org.dam.fcojavier.gestionpersonal.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Ausencia {
     private int idAusencia;
     private String motivo;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private Empleado empleado;
+
 
     public Ausencia() {}
 
@@ -30,6 +35,30 @@ public class Ausencia {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     @Override

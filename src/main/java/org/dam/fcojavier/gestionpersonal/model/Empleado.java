@@ -2,7 +2,7 @@ package org.dam.fcojavier.gestionpersonal.model;
 
 import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
 
-import java.util.List;
+import java.util.Objects;
 
 public class Empleado {
     private int idEmpleado;
@@ -86,7 +86,7 @@ public class Empleado {
         this.departamento = departamento;
     }
 
-    public boolean isActivo() {
+    public boolean getActivo() {
         return activo;
     }
 
@@ -123,5 +123,17 @@ public class Empleado {
                 ", activo=" + activo +
                 ", puesto='" + puesto + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Empleado empleado = (Empleado) o;
+        return Objects.equals(nombre, empleado.nombre) && Objects.equals(apellido, empleado.apellido) && Objects.equals(email, empleado.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, apellido, email);
     }
 }
