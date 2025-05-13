@@ -14,8 +14,8 @@ import java.util.List;
 
 public class EmpleadoDAO implements CrudDAO<Empleado> {
 
-    private final String insert_SQL = "INSERT INTO empleado (id_empresa, nombre, apellidos, departamento, telefono, email, password_hash, puesto, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String update_SQL = "UPDATE empleado SET id_empresa = ?, nombre = ?, apellidos = ?, departamento = ?, telefono = ?, email = ?, password_hash = ?, puesto = ?, rol = ? WHERE id_empleado = ?";
+    private final String insert_SQL = "INSERT INTO empleado (id_empresa, nombre, apellidos, departamento, telefono, email, puesto, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String update_SQL = "UPDATE empleado SET id_empresa = ?, nombre = ?, apellidos = ?, departamento = ?, telefono = ?, email = ?, puesto = ?, rol = ? WHERE id_empleado = ?";
     private final String delete_SQL = "DELETE FROM empleado WHERE id_empleado = ?";
     private final String findById_SQL = "SELECT * FROM empleado WHERE id_empleado = ?";
     private final String findAll_SQL = "SELECT * FROM empleado";
@@ -31,9 +31,8 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                 pstm.setString(4,empleado.getDepartamento());
                 pstm.setString(5,empleado.getTelefono());
                 pstm.setString(6,empleado.getEmail());
-                pstm.setString(7, empleado.getPasswordHash());
-                pstm.setString(8,empleado.getPuesto());
-                pstm.setString(9, empleado.getRol().name());
+                pstm.setString(7,empleado.getPuesto());
+                pstm.setString(8, empleado.getRol().name());
 
                 if (pstm.executeUpdate() == 0) {
                     throw new DAOException("Error al crear el empleado", DAOErrorTipo.INSERT_ERROR);
@@ -66,10 +65,9 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                     pstm.setString(4,empleado.getDepartamento());
                     pstm.setString(5,empleado.getTelefono());
                     pstm.setString(6,empleado.getEmail());
-                    pstm.setString(7, empleado.getPasswordHash());
-                    pstm.setString(8,empleado.getPuesto());
-                    pstm.setString(9, empleado.getRol().name());
-                    pstm.setInt(10,empleadoExistente.getIdEmpleado());
+                    pstm.setString(7,empleado.getPuesto());
+                    pstm.setString(8, empleado.getRol().name());
+                    pstm.setInt(9,empleadoExistente.getIdEmpleado());
 
                     if(pstm.executeUpdate() > 0) {
                         empleadoActualizado = empleado;
@@ -119,7 +117,6 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                     empleado.setDepartamento(rs.getString("departamento"));
                     empleado.setTelefono(rs.getString("telefono"));
                     empleado.setEmail(rs.getString("email"));
-                    empleado.setPasswordHash(rs.getString("password_hash"));
                     empleado.setPuesto(rs.getString("puesto"));
                     empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
                 }
@@ -146,8 +143,8 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                 empleado.setDepartamento(rs.getString("departamento"));
                 empleado.setTelefono(rs.getString("telefono"));
                 empleado.setEmail(rs.getString("email"));
-                empleado.setPasswordHash(rs.getString("password_hash"));
                 empleado.setPuesto(rs.getString("puesto"));
+                empleado.setActivo(rs.getBoolean("activo"));
                 empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
                 empleados.add(empleado);
             }
@@ -173,7 +170,6 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
                     empleado.setDepartamento(rs.getString("departamento"));
                     empleado.setTelefono(rs.getString("telefono"));
                     empleado.setEmail(rs.getString("email"));
-                    empleado.setPasswordHash(rs.getString("password_hash"));
                     empleado.setPuesto(rs.getString("puesto"));
                     empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
                 }

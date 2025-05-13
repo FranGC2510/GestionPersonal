@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.dam.fcojavier.gestionpersonal.controllers.GestionTurnosController"
+      spacing="20" style="-fx-padding: 20;">
+    
+    <!-- Barra superior -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f8f9fa; -fx-padding: 10;">
+        <Label text="Gestión de Turnos" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="nuevoTurnoButton" text="Nuevo Turno" 
+                onAction="#handleNuevoTurno"
+                style="-fx-background-color: #1a237e; -fx-text-fill: white;"/>
+    </HBox>
+    
+    <!-- Tabla de turnos -->
+    <TableView fx:id="turnosTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="descripcionColumn" text="Descripción" prefWidth="200"/>
+            <TableColumn fx:id="horaInicioColumn" text="Hora Inicio" prefWidth="150"/>
+            <TableColumn fx:id="horaFinColumn" text="Hora Fin" prefWidth="150"/>
+            <TableColumn fx:id="duracionColumn" text="Duración (h)" prefWidth="100"/>
+            <TableColumn fx:id="accionesColumn" text="Acciones" prefWidth="150"/>
+        </columns>
+    </TableView>
+    
+    <!-- Panel de asignación de turnos -->
+    <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 10;">
+        <Label text="Asignar Turno" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="empleadoComboBox" promptText="Seleccionar empleado" prefWidth="200"/>
+            <DatePicker fx:id="fechaAsignacion" promptText="Seleccionar fecha"/>
+            <Button text="Asignar" onAction="#handleAsignarTurno"
+                    style="-fx-background-color: #283593; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+</VBox>

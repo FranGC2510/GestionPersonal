@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.dam.fcojavier.gestionpersonal.controllers.GestionEmpleadosController"
+      spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 20;">
+
+    <!-- Cabecera -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Text text="Gestión de Empleados" style="-fx-font-size: 24px; -fx-fill: #37474f;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Barra de búsqueda y herramientas -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <TextField fx:id="searchField" promptText="Buscar empleado..." HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="filtroComboBox" promptText="Ordenar por..."/>
+        <Button text="Nuevo" styleClass="button-primary" onAction="#handleNuevoEmpleado"/>
+        <Button fx:id="editButton" text="Editar" disable="true" onAction="#handleEditarEmpleado"/>
+        <Button fx:id="deleteButton" text="Eliminar" disable="true" styleClass="button-danger" onAction="#handleBorrarEmpleado"/>
+    </HBox>
+
+    <!-- Tabla de empleados -->
+    <TableView fx:id="empleadosTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nombreColumn" text="Nombre" prefWidth="120"/>
+            <TableColumn fx:id="apellidoColumn" text="Apellidos" prefWidth="120"/>
+            <TableColumn fx:id="departamentoColumn" text="Departamento" prefWidth="120"/>
+            <TableColumn fx:id="puestoColumn" text="Puesto" prefWidth="120"/>
+            <TableColumn fx:id="telefonoColumn" text="Teléfono" prefWidth="100"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+            <TableColumn fx:id="activoColumn" text="Estado" prefWidth="80"/>
+            <TableColumn fx:id="rolColumn" text="Rol" prefWidth="100"/>
+        </columns>
+        <placeholder>
+            <Label text="No hay empleados registrados"/>
+        </placeholder>
+    </TableView>
+
+
+
+</VBox>

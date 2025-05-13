@@ -36,14 +36,16 @@
         </VBox.margin>
 
         <!-- Botón de Inicio de Sesión -->
-        <Button text="Iniciar Sesión"
+        <Button fx:id="loginButton"
+                text="Iniciar Sesión"
                 onAction="#handleLoginClick"
                 style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 50; -fx-background-radius: 5;"
                 maxWidth="300"/>
 
         <!-- Botón de Registro -->
-        <Button text="Registrar Empresa"
-                onAction="#handleRegisterClick"
+        <Button fx:id="registerButton"
+                text="Registrar Empresa"
+                onAction="#handleRegistroClick"
                 style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 50; -fx-background-radius: 5;"
                 maxWidth="300"/>
     </VBox>

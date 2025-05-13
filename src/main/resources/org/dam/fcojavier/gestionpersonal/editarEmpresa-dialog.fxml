@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.dam.fcojavier.gestionpersonal.controllers.EditarEmpresaController"
+      spacing="10" style="-fx-padding: 20;">
+
+    <Text text="Editar datos de empresa" style="-fx-font-size: 24px;"/>
+
+    <GridPane vgap="10" hgap="10">
+        <padding>
+            <Insets top="20" bottom="20"/>
+        </padding>
+
+        <!-- Nombre de la empresa -->
+        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nombreField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Email (deshabilitado) -->
+        <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField" disable="true" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Dirección -->
+        <Label text="Dirección:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="direccionField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Teléfono -->
+        <Label text="Teléfono:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="telefonoField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <!-- Nueva contraseña (opcional) -->
+        <Label text="Nueva contraseña (opcional):" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="passwordField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <!-- Confirmar nueva contraseña -->
+        <Label text="Confirmar contraseña:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="confirmarPasswordField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <!-- Mensaje de error -->
+    <Text fx:id="mensajeError" fill="RED" visible="false" wrappingWidth="400"/>
+
+    <!-- Botones -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancelar" onAction="#handleCancelar"/>
+        <Button text="Guardar cambios" onAction="#handleGuardar" style="-fx-background-color: #1a237e; -fx-text-fill: white;"/>
+    </HBox>
+
+</VBox>

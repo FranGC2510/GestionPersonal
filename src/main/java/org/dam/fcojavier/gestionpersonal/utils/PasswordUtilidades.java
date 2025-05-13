@@ -20,15 +20,4 @@ public class PasswordUtilidades {
     public static boolean checkPassword(String password, String hashedPassword) {
         return BCrypt.checkpw(password, hashedPassword);
     }
-    /**
-     * Valida si una contraseña cumple con los requisitos de seguridad:
-     * - Al menos 8 caracteres.
-     * - Al menos una letra minúscula, una letra mayúscula y un número.
-     *
-     * @param password La contraseña a validar.
-     * @return true si la contraseña es válida según los requisitos, false en caso contrario.
-     */
-    public static boolean validaPassword(String password){
-        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$");
-    }
 }

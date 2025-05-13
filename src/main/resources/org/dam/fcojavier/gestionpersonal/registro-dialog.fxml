@@ -24,7 +24,7 @@
                        promptText="Contraseña"
                        style="-fx-pref-width: 300;"/>
 
-        <PasswordField fx:id="confirmPasswordField"
+        <PasswordField fx:id="confirmaPasswordField"
                        promptText="Confirmar contraseña"
                        style="-fx-pref-width: 300;"/>
 

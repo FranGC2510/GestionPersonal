@@ -12,20 +12,26 @@ import java.io.IOException;
 
 public class WelcomeController {
     @FXML
+    private Button registerButton;
+
+    @FXML
+    private Button loginButton;
+    @FXML
     protected void handleLoginClick() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("login-dialog.fxml"));
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Iniciar Sesión");
             dialog.initStyle(StageStyle.UNIFIED);
+            dialog.initOwner(loginButton.getScene().getWindow());
             dialog.getDialogPane().setContent(fxmlLoader.load());
             dialog.setResizable(true);
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
             // Configurar botón OK para que no cierre el diálogo automáticamente
-            Button loginButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            loginButton.setText("Iniciar Sesión");
-            loginButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            Button dialogLoginButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            dialogLoginButton.setText("Iniciar Sesión");
+            dialogLoginButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
                 LoginController controller = fxmlLoader.getController();
                 controller.handleLogin();
                 // Prevenir que el diálogo se cierre
@@ -41,19 +47,20 @@ public class WelcomeController {
     }
 
     @FXML
-    protected void handleRegisterClick() {
+    protected void handleRegistroClick() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("registro-dialog.fxml"));
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Registro");
             dialog.initStyle(StageStyle.UNIFIED);
+            dialog.initOwner(registerButton.getScene().getWindow());
             dialog.getDialogPane().setContent(fxmlLoader.load());
             dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
             // Configurar botón OK para que no cierre el diálogo automáticamente
-            Button registerButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            registerButton.setText("Registrarse");
-            registerButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            Button dialogRegisterButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            dialogRegisterButton.setText("Registrarse");
+            dialogRegisterButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
                 RegistroController controller = fxmlLoader.getController();
                 controller.handleRegister();
                 // Prevenir que el diálogo se cierre

@@ -1,13 +1,19 @@
 package org.dam.fcojavier.gestionpersonal.controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import org.dam.fcojavier.gestionpersonal.DAOs.EmpleadoDAO;
+import javafx.stage.Stage;
 import org.dam.fcojavier.gestionpersonal.DAOs.EmpresaDAO;
+import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
-import org.dam.fcojavier.gestionpersonal.model.Empleado;
 import org.dam.fcojavier.gestionpersonal.model.Empresa;
+import org.dam.fcojavier.gestionpersonal.utils.PasswordUtilidades;
+import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
+import org.dam.fcojavier.gestionpersonal.utils.Validacion;
+
+import java.io.IOException;
 
 public class RegistroController {
     @FXML
@@ -17,7 +23,7 @@ public class RegistroController {
     private PasswordField passwordField;
 
     @FXML
-    private PasswordField confirmPasswordField;
+    private PasswordField confirmaPasswordField;
 
     @FXML
     private TextField nombreEmpresaField;
@@ -54,8 +60,39 @@ public class RegistroController {
             registrarEmpresa();
 
             // Si llegamos aquí, el registro fue exitoso
-            // Cerrar el diálogo
-            emailField.getScene().getWindow().hide();
+            Empresa empresaRegistrada = empresaDAO.findByEmail(emailField.getText());
+            // Iniciar sesión en el SessionManager
+            UsuarioSesion.getInstance().loginEmpresa(empresaRegistrada);
+
+            try {
+                // Cargar la vista de empresa
+                FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
+                Scene scene = new Scene(loader.load());
+
+                // Obtener el controlador y establecer la empresa
+                EmpresaController controller = loader.getController();
+                controller.setEmpresa(empresaRegistrada);
+
+                // Obtener la ventana principal (welcome-view) y cambiar la escena
+                Stage dialogStage = (Stage) emailField.getScene().getWindow();
+                Stage mainStage = (Stage) dialogStage.getOwner();
+                mainStage.setScene(scene);
+                mainStage.setTitle("Panel de Empresa - " + empresaRegistrada.getNombre());
+
+                // Cerrar el diálogo de registro
+                dialogStage.close();
+            } catch (IOException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error al cargar la vista de empresa");
+                alert.setContentText("Ha ocurrido un error al intentar cargar la vista. Por favor, inicie sesión manualmente.");
+                alert.showAndWait();
+                // Cerrar la sesión si hubo error al cargar la vista
+                UsuarioSesion.getInstance().logout();
+                // Cerrar solo el diálogo
+                Stage dialogStage = (Stage) emailField.getScene().getWindow();
+                dialogStage.close();
+            }
 
         } catch (DAOException e) {
             mostrarError("Error al registrar: " + e.getMessage());
@@ -63,39 +100,56 @@ public class RegistroController {
     }
 
     private boolean validarCamposComunes() {
+        String nombre = nombreEmpresaField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmaPassword = confirmaPasswordField.getText();
+        String direccion = direccionEmpresaField.getText();
+        String telefono = telefonoEmpresaField.getText();
+        boolean flag= true;
+
+        if (nombre.isEmpty() || email.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
+            mostrarError("Por favor, complete todos los campos requeridos");
+            flag= false;
+        }
+
         // Validar email
-        if (emailField.getText().isEmpty()) {
+        if (email.isEmpty()) {
             mostrarError("Por favor, ingrese un email");
-            return false;
+            flag= false;
+        }else if (!Validacion.isValidoEmail(email)) {
+            mostrarError(Validacion.validateEmail(email));
+            flag= false;
         }
 
         // Validar contraseña
-        if (passwordField.getText().isEmpty()) {
+        if (password.isEmpty()) {
             mostrarError("Por favor, ingrese una contraseña");
-            return false;
+            flag= false;
+        }else if(!Validacion.isValidaPassword(password)){
+            mostrarError(Validacion.validaPassword(password));
+            flag= false;
         }
 
         // Validar confirmación de contraseña
-        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
+        if (!password.equals(confirmaPassword)) {
             mostrarError("Las contraseñas no coinciden");
-            return false;
+            flag= false;
         }
 
-        // Validar campos de empresa
-        if (nombreEmpresaField.getText().isEmpty()) {
-            mostrarError("Por favor, ingrese el nombre de la empresa");
-            return false;
-        }
-        if (direccionEmpresaField.getText().isEmpty()) {
+        if (direccion.isEmpty()) {
             mostrarError("Por favor, ingrese la dirección de la empresa");
-            return false;
+            flag= false;
         }
-        if (telefonoEmpresaField.getText().isEmpty()) {
+        if (telefono.isEmpty()) {
             mostrarError("Por favor, ingrese el teléfono de la empresa");
-            return false;
+            flag= false;
+        }else if(!Validacion.isValidoTelefono(telefono)){
+            mostrarError(Validacion.validateTelefono(telefono));
+            flag= false;
         }
 
-        return true;
+        return flag;
     }
 
     private boolean emailExiste(String email) throws DAOException {
@@ -120,7 +174,8 @@ public class RegistroController {
         // Crear y guardar empresa
         Empresa empresa = new Empresa();
         empresa.setEmail(emailField.getText());
-        empresa.setPassword(passwordField.getText()); // TODO: Implementar hash
+        String hashedPassword = PasswordUtilidades.hashPassword(passwordField.getText());
+        empresa.setPassword(hashedPassword);
         empresa.setNombre(nombreEmpresaField.getText());
         empresa.setDireccion(direccionEmpresaField.getText());
         empresa.setTelefono(telefonoEmpresaField.getText());

@@ -11,7 +11,6 @@ public class Empleado {
     private String apellido;
     private String telefono;
     private String email;
-    private String passwordHash;
     private String departamento;
     private boolean activo;
     private String puesto;
@@ -27,7 +26,6 @@ public class Empleado {
         this.apellido = apellidos;
         this.telefono = telefono;
         this.email = email;
-        this.passwordHash = passwordHash;
         this.activo = true; // Por defecto los empleados están activos
         this.rol = TipoEmpleado.EMPLEADO;
     }
@@ -78,14 +76,6 @@ public class Empleado {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getDepartamento() {
