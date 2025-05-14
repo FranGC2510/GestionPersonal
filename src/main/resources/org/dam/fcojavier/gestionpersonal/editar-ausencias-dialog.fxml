@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.dam.fcojavier.gestionpersonal.controllers.EditarAusenciaController">
+    <content>
+        <GridPane hgap="10" vgap="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Empleado:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="empleadoComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Motivo:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextArea fx:id="motivoTextArea" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Fecha Inicio:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <DatePicker fx:id="fechaInicioPicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Fecha Fin:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <DatePicker fx:id="fechaFinPicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        </GridPane>
+    </content>
+    <buttonTypes>
+        <ButtonType fx:constant="OK"/>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+</DialogPane>

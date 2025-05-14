@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.dam.fcojavier.gestionpersonal.controllers.GestionTurnosController"
+      spacing="20" style="-fx-background-color: #f8f9fa;"
+      prefWidth="1000" prefHeight="600">
+
+    <!-- Cabecera -->
+    <VBox VBox.vgrow="NEVER">
+        <!-- Barra principal -->
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #1a237e; -fx-padding: 15 20;">
+            <Text text="Gestión de Turnos" style="-fx-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <!-- Barra de herramientas -->
+        <HBox style="-fx-background-color: #283593; -fx-padding: 10 20;" spacing="15" alignment="CENTER_LEFT">
+            <DatePicker fx:id="fechaFiltro" promptText="Filtrar por fecha" 
+                      style="-fx-background-color: white;" HBox.hgrow="ALWAYS"/>
+            <Button text="Filtrar" onAction="#handleFiltrarAsignaciones"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+            <Button text="Limpiar filtro" onAction="#handleLimpiarFiltro"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Nuevo Turno" onAction="#handleNuevoTurno"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+                <Button text="Asignar Turno" onAction="#handleAsignarTurno"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+            </HBox>
+        </HBox>
+    </VBox>
+
+    <!-- Contenido principal -->
+    <HBox spacing="20" VBox.vgrow="ALWAYS" style="-fx-padding: 20;">
+        <!-- Panel de Turnos -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Turnos Disponibles" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <TableView fx:id="turnosTable" VBox.vgrow="ALWAYS"
+                      style="-fx-background-radius: 5; -fx-background-color: #f5f5f5;">
+                <columns>
+                    <TableColumn fx:id="descripcionColumn" text="Descripción" prefWidth="150"/>
+                    <TableColumn fx:id="horaInicioColumn" text="Hora Inicio" prefWidth="100"/>
+                    <TableColumn fx:id="horaFinColumn" text="Hora Fin" prefWidth="100"/>
+                    <TableColumn fx:id="duracionColumn" text="Duración (h)" prefWidth="100"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <!-- Botones de acciones para turnos -->
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                <Button text="Editar Turno" onAction="#handleEditarTurno"
+                        fx:id="editarTurnoBtn"
+                        style="-fx-background-color: #283593; -fx-text-fill: white;"/>
+                <Button text="Eliminar Turno" onAction="#handleEliminarTurno"
+                        fx:id="eliminarTurnoBtn"
+                        style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+
+        <!-- Panel de Asignaciones -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Asignaciones de Turnos" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <TableView fx:id="asignacionesTable" VBox.vgrow="ALWAYS"
+                      style="-fx-background-radius: 5; -fx-background-color: #f5f5f5;">
+                <columns>
+                    <TableColumn fx:id="empleadoColumn" text="Empleado" prefWidth="150"/>
+                    <TableColumn fx:id="turnoColumn" text="Turno" prefWidth="120"/>
+                    <TableColumn fx:id="fechaColumn" text="Fecha" prefWidth="100"/>
+                    <TableColumn fx:id="horariosColumn" text="Horario" prefWidth="120"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <!-- Botón de eliminar asignación -->
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                <Button text="Eliminar Asignación" onAction="#handleEliminarAsignacion"
+                        fx:id="eliminarAsignacionBtn"
+                        style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

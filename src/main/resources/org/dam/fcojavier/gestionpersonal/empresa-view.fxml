@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane style="-fx-background-color: #f8f9fa;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="org.dam.fcojavier.gestionpersonal.controllers.EmpresaController">
+
+    <!-- Barra superior con información de la empresa y menú -->
+    <top>
+        <VBox>
+            <!-- Barra principal -->
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #1a237e; -fx-padding: 15 20;">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Text fx:id="empresaNombreText" style="-fx-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <MenuButton text="Configuración"
+                            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3; -fx-text-base-color: white">
+                    <items>
+                        <MenuItem text="✏️ Editar datos de empresa" onAction="#handleEditarEmpresa" style="-fx-text-fill: #000000; -fx-font-size: 14px;"/>
+                        <SeparatorMenuItem/>
+                        <MenuItem text="🗑️ Eliminar cuenta" onAction="#handleBorrarEmpresa" style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
+                    </items>
+                </MenuButton>
+                <Button text="Cerrar Sesión" onAction="#handleLogout"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
+            </HBox>
+
+            <!-- Barra de navegación -->
+            <HBox style="-fx-background-color: #283593; -fx-padding: 10 20;" spacing="25">
+                <Button text="Inicio"
+                        style="-fx-background-color: #3949ab; -fx-text-fill: white;"/>
+                <Button text="Empleados" onAction="#handleGestionEmpleados"
+                        style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="Turnos" onAction="#handleGestionTurnos"
+                        style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+                <Button text="Ausencias" onAction="#handleGestionAusencias"
+                        style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Panel principal -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: #f8f9fa; -fx-background-color: #f8f9fa;">
+            <VBox spacing="30" style="-fx-padding: 30;">
+                <!-- Título del Dashboard -->
+                <Text text="Panel de Control" style="-fx-font-size: 24px; -fx-fill: #37474f;"/>
+
+                <!-- Tarjetas de resumen -->
+                <HBox spacing="20" alignment="CENTER">
+                    <!-- Tarjeta de Empleados -->
+                    <VBox styleClass="dashboard-card"
+                          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"
+                          maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                        <Text text="Total Empleados" style="-fx-fill: #37474f; -fx-font-size: 16px;"/>
+                        <Text fx:id="empleadosCantidadText" text="0" style="-fx-fill: #1a237e; -fx-font-size: 42px; -fx-font-weight: bold;">
+                            <VBox.margin>
+                                <Insets top="10" bottom="10"/>
+                            </VBox.margin>
+                        </Text>
+                        <Hyperlink text="Gestionar empleados →" onAction="#handleGestionEmpleados"
+                                   style="-fx-text-fill: #3949ab; -fx-font-size: 14px; -fx-border-width: 0; -fx-padding: 0;"/>
+
+                    </VBox>
+
+                    <!-- Tarjeta de Empleados Trabajando -->
+                    <VBox styleClass="dashboard-card"
+                          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"
+                          maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                        <Text text="Empleados Trabajando Hoy" style="-fx-fill: #37474f; -fx-font-size: 16px;"/>
+                        <Text fx:id="empleadosTrabajandoText" text="0" style="-fx-fill: #1a237e; -fx-font-size: 42px; -fx-font-weight: bold;">
+                            <VBox.margin>
+                                <Insets top="10" bottom="10"/>
+                            </VBox.margin>
+                        </Text>
+                        <Hyperlink text="Ver turnos →" onAction="#handleGestionTurnos"
+                                   style="-fx-text-fill: #3949ab; -fx-font-size: 14px; -fx-border-width: 0; -fx-padding: 0;"/>
+
+                    </VBox>
+
+                    <!-- Tarjeta de Ausencias -->
+                    <VBox styleClass="dashboard-card"
+                          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"
+                          maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                        <Text text="Ausencias Activas" style="-fx-fill: #37474f; -fx-font-size: 16px;"/>
+                        <Text fx:id="ausenciasCantidadText" text="0" style="-fx-fill: #1a237e; -fx-font-size: 42px; -fx-font-weight: bold;">
+                            <VBox.margin>
+                                <Insets top="10" bottom="10"/>
+                            </VBox.margin>
+                        </Text>
+                        <Hyperlink text="Gestionar ausencias →" onAction="#handleGestionAusencias"
+                                   style="-fx-text-fill: #3949ab; -fx-font-size: 14px; -fx-border-width: 0; -fx-padding: 0;"/>
+
+                    </VBox>
+                </HBox>
+
+                <!-- Sección de Acciones Rápidas -->
+                <VBox spacing="15">
+                    <Text text="Acciones Rápidas" style="-fx-font-size: 20px; -fx-fill: #37474f;"/>
+                    <HBox spacing="15">
+                        <Button text="+ Nuevo Empleado" onAction="#handleNuevoEmpleadoRapido"
+                                style="-fx-background-color: #1a237e; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+                        <Button text="+ Asignar Turno" onAction="#handleAsignarTurnoRapido"
+                                style="-fx-background-color: #1a237e; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+                    </HBox>
+                </VBox>
+                <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <ImageView fitWidth="32" fitHeight="32" preserveRatio="true">
+                            <Image url="@images/icono-bombilla.png"/>
+                        </ImageView>
+                        <Text text="Consejos útiles"
+                              style="-fx-font-size: 24px; -fx-fill: #37474f; -fx-font-weight: bold;"/>
+                    </HBox>
+
+
+                    <VBox spacing="20" style="-fx-padding: 15 0;">
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Text text="•" style="-fx-fill: #1a237e; -fx-font-size: 20px;"/>
+                            <Text text="Gestiona fácilmente los turnos de tus empleados desde la sección 'Turnos'"
+                                  style="-fx-fill: #455a64; -fx-font-size: 18px;"/>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Text text="•" style="-fx-fill: #1a237e; -fx-font-size: 20px;"/>
+                            <Text text="Mantén un registro actualizado de las ausencias para una mejor organización"
+                                  style="-fx-fill: #455a64; -fx-font-size: 18px;"/>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Text text="•" style="-fx-fill: #1a237e; -fx-font-size: 20px;"/>
+                            <Text text="Accede rápidamente a toda la información de tu personal desde el panel de control"
+                                  style="-fx-fill: #455a64; -fx-font-size: 18px;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

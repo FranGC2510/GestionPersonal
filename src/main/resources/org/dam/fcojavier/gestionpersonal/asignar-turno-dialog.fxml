@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.dam.fcojavier.gestionpersonal.controllers.AsignarTurnoDialogController"
+      spacing="15" style="-fx-padding: 20;"
+      prefWidth="400" prefHeight="300">
+
+    <!-- Título -->
+    <Text text="Asignar Turno"
+          style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="15" style="-fx-padding: 10 0;">
+        <columnConstraints>
+            <ColumnConstraints minWidth="80" prefWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+        </columnConstraints>
+
+        <Label text="Empleado:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <ComboBox fx:id="empleadoComboBox" promptText="Seleccionar empleado"
+                  GridPane.columnIndex="1" GridPane.rowIndex="0"
+                  maxWidth="Infinity"/>
+
+        <Label text="Turno:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="turnoComboBox" promptText="Seleccionar turno"
+                  GridPane.columnIndex="1" GridPane.rowIndex="1"
+                  maxWidth="Infinity"/>
+
+        <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <DatePicker fx:id="fechaPicker" promptText="Seleccionar fecha"
+                    GridPane.columnIndex="1" GridPane.rowIndex="2"
+                    maxWidth="Infinity"/>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Cancelar" onAction="#handleCancelar"
+                style="-fx-padding: 5 15;"/>
+        <Button text="Asignar" onAction="#handleAsignar" defaultButton="true"
+                style="-fx-background-color: #1a237e; -fx-text-fill: white;
+                       -fx-padding: 5 15;"/>
+    </HBox>
+</VBox>
