@@ -20,6 +20,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
     private final String findById_SQL = "SELECT * FROM empleado WHERE id_empleado = ?";
     private final String findAll_SQL = "SELECT * FROM empleado";
     private final String findByEmail_SQL = "SELECT * FROM empleado WHERE email = ?";
+    private final String findByEmpresa_SQL = "SELECT * FROM empleado WHERE id_empresa = ?";
 
     @Override
     public Empleado insert(Empleado empleado) throws DAOException {
@@ -181,6 +182,20 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
             throw new DAOException("Error al buscar el empleado por email: " + e.getMessage(), DAOErrorTipo.NOT_FOUND);
         }
         return empleado;
+    }
+
+    public boolean findByEmpresa(int idEmpresa) throws DAOException {
+        int cantidadEmpleados = 0;
+        try (PreparedStatement stmt = ConnectionDB.getConnection().prepareStatement(findByEmpresa_SQL)) {
+            stmt.setInt(1, idEmpresa);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                cantidadEmpleados= rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al verificar empleados de la empresa", DAOErrorTipo.NOT_FOUND);
+        }
+        return cantidadEmpleados>0;
     }
 
 }

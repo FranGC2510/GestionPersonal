@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
 import org.dam.fcojavier.gestionpersonal.model.Empleado;
 import org.dam.fcojavier.gestionpersonal.model.Empresa;
+import org.dam.fcojavier.gestionpersonal.utils.Validacion;
 
 public class EditarEmpleadosController {
     @FXML
@@ -51,11 +52,13 @@ public class EditarEmpleadosController {
         });
 
         emailField.textProperty().addListener((_, _, newText) -> {
-            validarCampo(emailField, newText.matches("^[A-Za-z0-9+_.-]+@(.+)$"), "Email inválido");
+            validarCampo(emailField, Validacion.isValidoEmail(newText), Validacion.ERROR_EMAIL
+            );
         });
 
         telefonoField.textProperty().addListener((_, _, newText) -> {
-            validarCampo(telefonoField, newText.matches("^\\d{9}$"), "Teléfono debe tener 9 dígitos");
+            validarCampo(telefonoField, Validacion.isValidoTelefono(newText), Validacion.ERROR_TELEFONO
+            );
         });
 
         // Por defecto, el empleado está activo
@@ -109,8 +112,8 @@ public class EditarEmpleadosController {
         if (dialogPane != null) {
             boolean nombreValido = !nombreField.getText().trim().isEmpty();
             boolean apellidoValido = !apellidoField.getText().trim().isEmpty();
-            boolean emailValido = emailField.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$");
-            boolean telefonoValido = telefonoField.getText().matches("^\\d{9}$");
+            boolean emailValido = Validacion.isValidoEmail(emailField.getText());
+            boolean telefonoValido = Validacion.isValidoTelefono(telefonoField.getText());
             boolean rolValido = rolComboBox.getValue() != null;
 
             boolean datosValidos = nombreValido &&

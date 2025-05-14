@@ -5,11 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.dam.fcojavier.gestionpersonal.DAOs.EmpleadoDAO;
 import org.dam.fcojavier.gestionpersonal.DAOs.EmpresaDAO;
 import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
-import org.dam.fcojavier.gestionpersonal.model.Empleado;
 import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import org.dam.fcojavier.gestionpersonal.utils.PasswordUtilidades;
 import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
@@ -26,7 +24,6 @@ public class LoginController {
     @FXML
     private Label mensajeError;
 
-    private final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
     private final EmpresaDAO empresaDAO = new EmpresaDAO();
 
     @FXML

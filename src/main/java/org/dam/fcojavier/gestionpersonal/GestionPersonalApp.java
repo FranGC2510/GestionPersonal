@@ -15,8 +15,8 @@ public class GestionPersonalApp extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 800, 700);
         stage.setTitle("Gestión de Personal");
         stage.setScene(scene);
-        stage.setMinWidth(800);
-        stage.setMinHeight(700);
+        stage.setWidth(1500);
+        stage.setHeight(875);
         stage.show();
     }
 

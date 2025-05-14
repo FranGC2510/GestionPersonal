@@ -19,7 +19,7 @@
                 <MenuButton text="Configuración"
                             style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3; -fx-text-base-color: white">
                     <items>
-                        <MenuItem text="✏️ Editar datos de empresa" onAction="#handleEditarEmpresa" style="-fx-font-size: 14px;"/>
+                        <MenuItem text="✏️ Editar datos de empresa" onAction="#handleEditarEmpresa" style="-fx-text-fill: #000000; -fx-font-size: 14px;"/>
                         <SeparatorMenuItem/>
                         <MenuItem text="🗑️ Eliminar cuenta" onAction="#handleBorrarEmpresa" style="-fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
                     </items>

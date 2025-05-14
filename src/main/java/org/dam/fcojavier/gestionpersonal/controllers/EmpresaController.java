@@ -3,11 +3,10 @@ package org.dam.fcojavier.gestionpersonal.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.dam.fcojavier.gestionpersonal.DAOs.EmpleadoDAO;
 import org.dam.fcojavier.gestionpersonal.DAOs.EmpresaDAO;
 import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
@@ -30,7 +29,6 @@ public class EmpresaController {
     private Empresa empresa;
 
     public void initialize() {
-        // Este método se llama automáticamente después de cargar el FXML
         updateDashboard();
     }
 
@@ -60,10 +58,8 @@ public class EmpresaController {
 
         // Restaurar el título y tamaño de la ventana
         stage.setTitle("Gestión de Personal");
-        stage.setWidth(800);  // Ancho original
-        stage.setHeight(700); // Alto original
-        stage.setMinWidth(800);
-        stage.setMinHeight(700);
+        stage.setWidth(1500);  // Ancho original
+        stage.setHeight(875); // Alto original
 
         // Cambiar la escena
         stage.setScene(scene);
@@ -186,27 +182,39 @@ public class EmpresaController {
 
     @FXML
     private void handleBorrarEmpresa() {
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Está seguro que desea eliminar su cuenta de empresa?");
-        confirmacion.setContentText("Esta acción no se puede deshacer y eliminará todos los datos asociados a su empresa, incluyendo empleados y registros de ausencias.");
+        try {
+            // Primero verificamos si tiene empleados
+            EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+            if (empleadoDAO.findByEmpresa(empresa.getIdEmpresa())) {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Error al eliminar");
+                error.setHeaderText("No se puede eliminar la empresa");
+                error.setContentText("La empresa tiene empleados asociados. Debe eliminar todos los empleados antes de poder eliminar la empresa.");
+                error.showAndWait();
+                return;
+            }
 
-        Optional<ButtonType> result = confirmacion.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
+            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmar eliminación");
+            confirmacion.setHeaderText("¿Está seguro que desea eliminar su cuenta de empresa?");
+            confirmacion.setContentText("Esta acción no se puede deshacer y eliminará todos los datos asociados a su empresa, incluyendo empleados y registros de ausencias.");
+
+            Optional<ButtonType> result = confirmacion.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                 // Eliminar la empresa de la base de datos
                 EmpresaDAO empresaDAO = new EmpresaDAO();
                 empresaDAO.delete(empresa);
 
                 // Cerrar sesión y volver a la pantalla de bienvenida
                 handleLogout();
-            } catch (DAOException | IOException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error al eliminar la cuenta");
-                alert.setContentText("No se pudo eliminar la cuenta. Por favor, inténtelo de nuevo.");
-                alert.showAndWait();
             }
+        } catch (DAOException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error al eliminar la cuenta");
+            alert.setContentText("No se pudo eliminar la cuenta. Por favor, inténtelo de nuevo.");
+            alert.showAndWait();
+
         }
     }
 }
