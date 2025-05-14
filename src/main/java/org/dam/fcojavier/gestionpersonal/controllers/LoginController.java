@@ -60,6 +60,9 @@ public class LoginController {
                         // Establecer la nueva escena en la ventana principal
                         mainStage.setScene(scene);
                         mainStage.setTitle("Panel de Empresa - " + empresa.getNombre());
+                        mainStage.setWidth(1500);
+                        mainStage.setHeight(875);
+                        mainStage.centerOnScreen();
 
                         // Cerrar el diálogo de login
                         dialogStage.close();

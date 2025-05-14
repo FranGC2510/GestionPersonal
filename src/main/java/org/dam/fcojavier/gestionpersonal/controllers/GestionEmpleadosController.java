@@ -263,4 +263,9 @@ public class GestionEmpleadosController {
             }
         }
     }
+
+    public void abrirDialogNuevoEmpleado() {
+        handleNuevoEmpleado();
+    }
+
 }

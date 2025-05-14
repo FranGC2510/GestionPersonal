@@ -13,6 +13,7 @@ import org.dam.fcojavier.gestionpersonal.DAOs.TurnoDAO;
 import org.dam.fcojavier.gestionpersonal.DAOs.PerteneceTurnoDAO;
 import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
+import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import org.dam.fcojavier.gestionpersonal.model.Turno;
 import org.dam.fcojavier.gestionpersonal.model.Empleado;
 import org.dam.fcojavier.gestionpersonal.model.PerteneceTurno;
@@ -58,6 +59,8 @@ public class GestionTurnosController {
     private PerteneceTurnoDAO perteneceTurnoDAO;
     private ObservableList<Turno> turnos;
     private ObservableList<PerteneceTurno> asignaciones;
+    private Empresa empresaActual;
+
 
     @FXML
     public void initialize() {
@@ -278,6 +281,13 @@ public class GestionTurnosController {
         }
     }
 
+    public void setEmpresa(Empresa empresa) {
+        this.empresaActual = empresa;
+    }
+
+    public void abrirDialogAsignarTurno() {
+        handleAsignarTurno();
+    }
 
     private void mostrarError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

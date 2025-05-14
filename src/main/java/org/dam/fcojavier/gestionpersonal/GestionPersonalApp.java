@@ -12,7 +12,7 @@ public class GestionPersonalApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("welcome-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 700);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Gestión de Personal");
         stage.setScene(scene);
         stage.setWidth(1500);

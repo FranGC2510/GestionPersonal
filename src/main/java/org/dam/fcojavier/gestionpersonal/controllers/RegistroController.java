@@ -78,6 +78,9 @@ public class RegistroController {
                 Stage mainStage = (Stage) dialogStage.getOwner();
                 mainStage.setScene(scene);
                 mainStage.setTitle("Panel de Empresa - " + empresaRegistrada.getNombre());
+                mainStage.setWidth(1500);
+                mainStage.setHeight(875);
+                mainStage.centerOnScreen();
 
                 // Cerrar el diálogo de registro
                 dialogStage.close();
