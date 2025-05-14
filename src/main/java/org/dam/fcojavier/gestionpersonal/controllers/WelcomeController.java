@@ -42,7 +42,6 @@ public class WelcomeController {
             dialog.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Mostrar error al usuario
         }
     }
 
@@ -71,7 +70,6 @@ public class WelcomeController {
             dialog.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: Mostrar error al usuario
         }
     }
 }
