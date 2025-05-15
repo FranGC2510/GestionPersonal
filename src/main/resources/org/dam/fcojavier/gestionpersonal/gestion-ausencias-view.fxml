@@ -21,7 +21,9 @@
             <ComboBox fx:id="empleadoFilterComboBox" promptText="Filtrar por empleado"
                       style="-fx-background-color: white;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <DatePicker fx:id="fechaFilterDatePicker" promptText="Filtrar por fecha"
-                      style="-fx-background-color: white;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        style="-fx-background-color: white;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button text="Limpiar filtros" onAction="#handleLimpiarFiltros"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <HBox spacing="10" alignment="CENTER_RIGHT">
                 <Button text="Nueva Ausencia" onAction="#handleNuevaAusencia"

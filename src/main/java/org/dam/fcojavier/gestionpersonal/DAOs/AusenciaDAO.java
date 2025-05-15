@@ -17,6 +17,9 @@ public class AusenciaDAO implements CrudDAO<Ausencia> {
     private final String delete_SQL = "DELETE FROM ausencia WHERE id_ausencia = ?";
     private final String findById_SQL = "SELECT * FROM ausencia WHERE id_ausencia = ?";
     private final String findAll_SQL = "SELECT * FROM ausencia";
+    private final String findByEmpresa_SQL = "SELECT a.* FROM ausencia a " +
+            "INNER JOIN empleado e ON a.id_empleado = e.id_empleado " +
+            "WHERE e.id_empresa = ?";
 
     private final EmpleadoDAO empleadoDAO; // Necesitamos inyectar EmpleadoDAO
 
@@ -141,6 +144,31 @@ public class AusenciaDAO implements CrudDAO<Ausencia> {
             }
         } catch (SQLException e) {
             throw new DAOException("Error al listar las ausencias: " + e.getMessage(), DAOErrorTipo.CONNECTION_ERROR);
+        }
+        return ausencias;
+    }
+
+    public List<Ausencia> findByEmpresa(int idEmpresa) throws DAOException {
+        List<Ausencia> ausencias = new java.util.ArrayList<>();
+
+        try(PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(findByEmpresa_SQL)) {
+            pstm.setInt(1, idEmpresa);
+            try(ResultSet rs = pstm.executeQuery()) {
+                while(rs.next()) {
+                    Ausencia ausencia = new Ausencia();
+                    ausencia.setIdAusencia(rs.getInt("id_ausencia"));
+                    ausencia.setMotivo(rs.getString("motivo"));
+                    ausencia.setFechaInicio(rs.getDate("fecha_inicio").toLocalDate());
+                    java.sql.Date fechaFin = rs.getDate("fecha_fin");
+                    if (fechaFin != null) {
+                        ausencia.setFechaFin(fechaFin.toLocalDate());
+                    }
+                    ausencia.setEmpleado(empleadoDAO.findById(rs.getInt("id_empleado")));
+                    ausencias.add(ausencia);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al listar las ausencias por empresa: " + e.getMessage(), DAOErrorTipo.CONNECTION_ERROR);
         }
         return ausencias;
     }

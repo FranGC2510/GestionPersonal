@@ -17,10 +17,8 @@ import java.io.IOException;
 public class LoginController {
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Label mensajeError;
 
@@ -28,67 +26,83 @@ public class LoginController {
 
     @FXML
     protected void handleLogin() {
-        String email = emailField.getText();
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            mostrarError("Por favor, complete todos los campos");
+        if (!validarCampos(email, password)) {
             return;
         }
 
         try {
-            // Intentar primero como empresa
-            Empresa empresa = empresaDAO.findByEmail(email);
-            if (empresa != null) {
-                if (verificarPassword(password, empresa.getPassword())) {
-                    // Iniciar sesión en el UsuarioSesion
-                    UsuarioSesion.getInstance().loginEmpresa(empresa);
-
-                    // Cargar la vista de empresa
-                    try {
-                        FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
-                        Scene scene = new Scene(loader.load());
-
-                        // Obtener el controlador y establecer la empresa
-                        EmpresaController controller = loader.getController();
-                        controller.setEmpresa(empresa);
-
-                        // Obtener el diálogo actual y la ventana principal
-                        Stage dialogStage = (Stage) emailField.getScene().getWindow();
-                        Stage mainStage = (Stage) dialogStage.getOwner();
-
-                        // Establecer la nueva escena en la ventana principal
-                        mainStage.setScene(scene);
-                        mainStage.setTitle("Panel de Empresa - " + empresa.getNombre());
-                        mainStage.setWidth(1500);
-                        mainStage.setHeight(875);
-                        mainStage.centerOnScreen();
-
-                        // Cerrar el diálogo de login
-                        dialogStage.close();
-                    } catch (IOException ex) {
-                        // Si hay error al cargar la vista, cerrar la sesión
-                        UsuarioSesion.getInstance().logout();
-
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Error al cargar la vista de empresa");
-                        alert.setContentText("Ha ocurrido un error al intentar cargar la vista. Por favor, inténtelo de nuevo.");
-                        alert.showAndWait();
-                    }
-                    return;
-                }
-                mostrarError("Contraseña incorrecta");
-                return;
-            }
-
-            // Si no se encuentra el email en ninguna tabla
-            mostrarError("No se encuentra ninguna cuenta con este email");
+            procesarLogin(email, password);
         } catch (DAOException e) {
             mostrarError("Error al iniciar sesión: " + e.getMessage());
         }
     }
 
+    private boolean validarCampos(String email, String password) {
+        if (email.isEmpty() || password.isEmpty()) {
+            mostrarError("Por favor, complete todos los campos");
+            return false;
+        }
+        return true;
+    }
+
+    private void procesarLogin(String email, String password) throws DAOException {
+        Empresa empresa = empresaDAO.findByEmail(email);
+        
+        if (empresa == null) {
+            mostrarError("No se encuentra ninguna cuenta con este email");
+            return;
+        }
+
+        if (!verificarPassword(password, empresa.getPassword())) {
+            mostrarError("Contraseña incorrecta");
+            return;
+        }
+
+        iniciarSesionEmpresa(empresa);
+    }
+
+    private void iniciarSesionEmpresa(Empresa empresa) {
+        try {
+            UsuarioSesion.getInstance().loginEmpresa(empresa);
+            cargarVistaEmpresa(empresa);
+        } catch (IOException ex) {
+            manejarErrorCargaVista();
+        }
+    }
+
+    private void cargarVistaEmpresa(Empresa empresa) throws IOException {
+        FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
+        Scene scene = new Scene(loader.load());
+
+        EmpresaController controller = loader.getController();
+        controller.setEmpresa(empresa);
+
+        Stage dialogStage = (Stage) emailField.getScene().getWindow();
+        Stage mainStage = (Stage) dialogStage.getOwner();
+
+        configurarVentanaPrincipal(mainStage, scene, empresa.getNombre());
+        dialogStage.close();
+    }
+
+    private void configurarVentanaPrincipal(Stage stage, Scene scene, String nombreEmpresa) {
+        stage.setScene(scene);
+        stage.setTitle("Panel de Empresa - " + nombreEmpresa);
+        stage.setWidth(1500);
+        stage.setHeight(875);
+        stage.centerOnScreen();
+    }
+
+    private void manejarErrorCargaVista() {
+        UsuarioSesion.getInstance().logout();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error al cargar la vista de empresa");
+        alert.setContentText("Ha ocurrido un error al intentar cargar la vista. Por favor, inténtelo de nuevo.");
+        alert.showAndWait();
+    }
 
     private boolean verificarPassword(String password, String hash) {
         return PasswordUtilidades.checkPassword(password, hash);

@@ -20,8 +20,6 @@
         <HBox style="-fx-background-color: #283593; -fx-padding: 10 20;" spacing="15" alignment="CENTER_LEFT">
             <DatePicker fx:id="fechaFiltro" promptText="Filtrar por fecha" 
                       style="-fx-background-color: white;" HBox.hgrow="ALWAYS"/>
-            <Button text="Filtrar" onAction="#handleFiltrarAsignaciones"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
             <Button text="Limpiar filtro" onAction="#handleLimpiarFiltro"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 3;"/>
             <Region HBox.hgrow="ALWAYS"/>

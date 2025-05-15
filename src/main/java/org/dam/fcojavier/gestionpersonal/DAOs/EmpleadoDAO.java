@@ -6,6 +6,7 @@ import org.dam.fcojavier.gestionpersonal.enums.TipoEmpleado;
 import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.interfaces.CrudDAO;
 import org.dam.fcojavier.gestionpersonal.model.Empleado;
+import org.dam.fcojavier.gestionpersonal.model.Empresa;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -184,7 +185,7 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleado;
     }
 
-    public boolean findByEmpresa(int idEmpresa) throws DAOException {
+    public boolean hayEmpleadosByEmpresa(int idEmpresa) throws DAOException {
         int cantidadEmpleados = 0;
         try (PreparedStatement stmt = ConnectionDB.getConnection().prepareStatement(findByEmpresa_SQL)) {
             stmt.setInt(1, idEmpresa);
@@ -196,6 +197,33 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
             throw new DAOException("Error al verificar empleados de la empresa", DAOErrorTipo.NOT_FOUND);
         }
         return cantidadEmpleados>0;
+    }
+
+    public List<Empleado> findByEmpresa(Empresa empresa) throws DAOException {
+        List<Empleado> empleados = new java.util.ArrayList<>();
+
+        try (PreparedStatement stmt = ConnectionDB.getConnection().prepareStatement(findByEmpresa_SQL)) {
+            stmt.setInt(1, empresa.getIdEmpresa());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Empleado empleado = new Empleado();
+                    empleado.setIdEmpleado(rs.getInt("id_empleado"));
+                    empleado.setEmpresa(empresa);
+                    empleado.setNombre(rs.getString("nombre"));
+                    empleado.setApellido(rs.getString("apellidos"));
+                    empleado.setDepartamento(rs.getString("departamento"));
+                    empleado.setTelefono(rs.getString("telefono"));
+                    empleado.setEmail(rs.getString("email"));
+                    empleado.setPuesto(rs.getString("puesto"));
+                    empleado.setActivo(rs.getBoolean("activo"));
+                    empleado.setRol(TipoEmpleado.valueOf(rs.getString("rol")));
+                    empleados.add(empleado);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error al buscar empleados de la empresa: " + e.getMessage(), DAOErrorTipo.NOT_FOUND);
+        }
+        return empleados;
     }
 
 }
