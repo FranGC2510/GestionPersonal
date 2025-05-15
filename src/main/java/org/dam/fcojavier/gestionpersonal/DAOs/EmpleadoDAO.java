@@ -13,16 +13,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Clase que implementa el acceso a datos para la entidad Empleado.
+ * Proporciona operaciones CRUD y consultas específicas para gestionar los empleados
+ * en la base de datos. Implementa la interfaz CrudDAO para operaciones básicas.
+ *
+ */
 public class EmpleadoDAO implements CrudDAO<Empleado> {
 
+    /** Consulta SQL para insertar un nuevo empleado */
     private final String insert_SQL = "INSERT INTO empleado (id_empresa, nombre, apellidos, departamento, telefono, email, puesto, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    /** Consulta SQL para actualizar un empleado existente */
     private final String update_SQL = "UPDATE empleado SET id_empresa = ?, nombre = ?, apellidos = ?, telefono = ?, email = ?, activo = ?, departamento = ?, rol = ? WHERE id_empleado = ?";
+    
+    /** Consulta SQL para eliminar un empleado */
     private final String delete_SQL = "DELETE FROM empleado WHERE id_empleado = ?";
+    
+    /** Consulta SQL para buscar un empleado por su ID */
     private final String findById_SQL = "SELECT * FROM empleado WHERE id_empleado = ?";
+    
+    /** Consulta SQL para obtener todos los empleados */
     private final String findAll_SQL = "SELECT * FROM empleado";
+    
+    /** Consulta SQL para buscar un empleado por su email */
     private final String findByEmail_SQL = "SELECT * FROM empleado WHERE email = ?";
+    
+    /** Consulta SQL para obtener empleados por empresa */
     private final String findByEmpresa_SQL = "SELECT * FROM empleado WHERE id_empresa = ?";
 
+    /**
+     * Inserta un nuevo empleado en la base de datos.
+     * Verifica que el empleado no exista previamente por su email.
+     *
+     * @param empleado El empleado a insertar
+     * @return El empleado insertado con su ID generado, o null si ya existe
+     * @throws DAOException Si ocurre un error durante la inserción
+     */
     @Override
     public Empleado insert(Empleado empleado) throws DAOException {
         if(empleado!=null && findByEmail(empleado.getEmail())==null) {
@@ -55,6 +82,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleado;
     }
 
+    /**
+     * Actualiza un empleado existente en la base de datos.
+     *
+     * @param empleado El empleado con los nuevos datos
+     * @return El empleado actualizado, o null si no existe
+     * @throws DAOException Si ocurre un error durante la actualización
+     */
     @Override
     public Empleado update(Empleado empleado) throws DAOException {
         Empleado empleadoActualizado = null;
@@ -85,6 +119,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleadoActualizado;
     }
 
+    /**
+     * Elimina un empleado de la base de datos.
+     *
+     * @param empleado El empleado a eliminar
+     * @return true si se eliminó correctamente, false en caso contrario
+     * @throws DAOException Si ocurre un error durante la eliminación
+     */
     @Override
     public boolean delete(Empleado empleado) throws DAOException {
         boolean deleted=false;
@@ -103,6 +144,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return deleted;
     }
 
+    /**
+     * Busca un empleado por su ID.
+     *
+     * @param id ID del empleado a buscar
+     * @return El empleado encontrado, o null si no existe
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     @Override
     public Empleado findById(int id) throws DAOException {
         Empleado empleado = null;
@@ -131,6 +179,12 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleado;
     }
 
+    /**
+     * Obtiene todos los empleados registrados en la base de datos.
+     *
+     * @return Lista de todos los empleados
+     * @throws DAOException Si ocurre un error al obtener los datos
+     */
     @Override
     public List<Empleado> findAll() throws DAOException {
         List<Empleado> empleados = new java.util.ArrayList<>();
@@ -158,6 +212,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleados;
     }
 
+    /**
+     * Busca un empleado por su dirección de email.
+     *
+     * @param email Email del empleado a buscar
+     * @return El empleado encontrado, o null si no existe
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     public Empleado findByEmail(String email) throws DAOException {
         Empleado empleado = null;
         EmpresaDAO empresaDAO = new EmpresaDAO();
@@ -185,6 +246,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return empleado;
     }
 
+    /**
+     * Verifica si una empresa tiene empleados.
+     *
+     * @param idEmpresa ID de la empresa a verificar
+     * @return true si la empresa tiene empleados, false en caso contrario
+     * @throws DAOException Si ocurre un error durante la verificación
+     */
     public boolean hayEmpleadosByEmpresa(int idEmpresa) throws DAOException {
         int cantidadEmpleados = 0;
         try (PreparedStatement stmt = ConnectionDB.getConnection().prepareStatement(findByEmpresa_SQL)) {
@@ -199,6 +267,13 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         return cantidadEmpleados>0;
     }
 
+    /**
+     * Obtiene todos los empleados de una empresa específica.
+     *
+     * @param empresa La empresa cuyos empleados se desean obtener
+     * @return Lista de empleados de la empresa
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     public List<Empleado> findByEmpresa(Empresa empresa) throws DAOException {
         List<Empleado> empleados = new java.util.ArrayList<>();
 
@@ -225,5 +300,4 @@ public class EmpleadoDAO implements CrudDAO<Empleado> {
         }
         return empleados;
     }
-
 }

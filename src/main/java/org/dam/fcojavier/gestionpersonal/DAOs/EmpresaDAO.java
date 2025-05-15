@@ -9,18 +9,43 @@ import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
+/**
+ * Clase que implementa el acceso a datos para la entidad Empresa.
+ * Proporciona operaciones CRUD y consultas específicas para gestionar las empresas
+ * en la base de datos. Implementa la interfaz CrudDAO para operaciones básicas.
+ *
+ */
 public class EmpresaDAO implements CrudDAO<Empresa> {
 
+    /** Consulta SQL para insertar una nueva empresa */
     private final String insert_SQL = "INSERT INTO empresa (nombre, direccion, telefono, email, password_hash) VALUES (?, ?, ?, ?, ?)";
+    
+    /** Consulta SQL para actualizar una empresa existente */
     private final String update_SQL = "UPDATE empresa SET nombre = ?, direccion = ?, telefono = ?, email = ?, password_hash = ? WHERE id_empresa = ?";
+    
+    /** Consulta SQL para eliminar una empresa */
     private final String delete_SQL = "DELETE FROM empresa WHERE id_empresa = ?";
+    
+    /** Consulta SQL para buscar una empresa por su ID */
     private final String findById_SQL = "SELECT * FROM empresa WHERE id_empresa = ?";
+    
+    /** Consulta SQL para obtener todas las empresas */
     private final String findAll_SQL = "SELECT * FROM empresa";
+    
+    /** Consulta SQL para buscar una empresa por su email */
     private final String findByEmail_SQL = "SELECT * FROM empresa WHERE email = ?";
 
+    /**
+     * Inserta una nueva empresa en la base de datos.
+     * Verifica que la empresa no exista previamente por su email.
+     *
+     * @param empresa La empresa a insertar
+     * @return La empresa insertada con su ID generado, o null si ya existe
+     * @throws DAOException Si ocurre un error durante la inserción o si ya existe una empresa con el mismo email
+     */
     @Override
     public Empresa insert(Empresa empresa) throws DAOException {
         if(empresa!=null && findByEmail(empresa.getEmail())==null) {
@@ -44,6 +69,13 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return empresa;
     }
 
+    /**
+     * Actualiza una empresa existente en la base de datos.
+     *
+     * @param empresa La empresa con los nuevos datos
+     * @return La empresa actualizada, o null si no existe
+     * @throws DAOException Si ocurre un error durante la actualización o si la empresa no existe
+     */
     @Override
     public Empresa update(Empresa empresa) throws DAOException {
         Empresa empresaActualizada=null;
@@ -71,6 +103,14 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return empresaActualizada;
     }
 
+    /**
+     * Elimina una empresa de la base de datos.
+     * La eliminación es en cascada y afectará a todos los registros relacionados.
+     *
+     * @param empresa La empresa a eliminar
+     * @return true si se eliminó correctamente, false en caso contrario
+     * @throws DAOException Si ocurre un error durante la eliminación
+     */
     @Override
     public boolean delete(Empresa empresa) throws DAOException {
         boolean deleted=false;
@@ -89,6 +129,13 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return deleted;
     }
 
+    /**
+     * Busca una empresa por su ID.
+     *
+     * @param id ID de la empresa a buscar
+     * @return La empresa encontrada, o null si no existe
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     @Override
     public Empresa findById(int id) throws DAOException {
         Empresa empresa = null;
@@ -110,6 +157,12 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return empresa;
     }
 
+    /**
+     * Obtiene todas las empresas registradas en la base de datos.
+     *
+     * @return Lista de todas las empresas
+     * @throws DAOException Si ocurre un error al obtener los datos
+     */
     @Override
     public List<Empresa> findAll() throws DAOException {
         List<Empresa> empresas = new ArrayList<>();
@@ -131,6 +184,15 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         return empresas;
     }
 
+    /**
+     * Busca una empresa por su dirección de email.
+     * Este método es útil para verificar la existencia de una empresa
+     * antes de su inserción o para el proceso de inicio de sesión.
+     *
+     * @param email Email de la empresa a buscar
+     * @return La empresa encontrada, o null si no existe
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     public Empresa findByEmail(String email) throws DAOException {
         Empresa empresa = null;
         try (PreparedStatement pstm = ConnectionDB.getConnection().prepareStatement(findByEmail_SQL)){
@@ -150,5 +212,4 @@ public class EmpresaDAO implements CrudDAO<Empresa> {
         }
         return empresa;
     }
-
 }

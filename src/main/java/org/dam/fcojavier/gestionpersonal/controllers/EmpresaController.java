@@ -8,10 +8,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.dam.fcojavier.gestionpersonal.DAOs.*;
+import org.dam.fcojavier.gestionpersonal.DAOs.AusenciaDAO;
+import org.dam.fcojavier.gestionpersonal.DAOs.EmpleadoDAO;
+import org.dam.fcojavier.gestionpersonal.DAOs.EmpresaDAO;
+import org.dam.fcojavier.gestionpersonal.DAOs.PerteneceTurnoDAO;
 import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
-import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.model.*;
+import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
 
 import java.io.IOException;
@@ -19,27 +22,48 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador principal para la vista de empresa.
+ * Gestiona el dashboard principal y proporciona acceso a todas las funcionalidades
+ * de gestión de la empresa, incluyendo empleados, turnos y ausencias.
+ */
 public class EmpresaController {
-    @FXML
-    private Text empresaNombreText;
-    @FXML
-    private Text empleadosCantidadText;
-    @FXML
-    private Text ausenciasCantidadText;
-    @FXML
-    private Text empleadosTrabajandoText;
+    /** Texto que muestra el nombre de la empresa */
+    @FXML private Text empresaNombreText;
+    
+    /** Texto que muestra la cantidad total de empleados */
+    @FXML private Text empleadosCantidadText;
+    
+    /** Texto que muestra la cantidad de ausencias activas */
+    @FXML private Text ausenciasCantidadText;
+    
+    /** Texto que muestra la cantidad de empleados trabajando actualmente */
+    @FXML private Text empleadosTrabajandoText;
 
+    /** Empresa actual */
     private Empresa empresa;
 
+    /**
+     * Inicializa el controlador.
+     * Actualiza el dashboard con los datos iniciales.
+     */
     public void initialize() {
         actualizarDashboard();
     }
 
+    /**
+     * Establece la empresa actual y actualiza la interfaz.
+     *
+     * @param empresa La empresa a establecer
+     */
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
         actualizarDashboard();
     }
 
+    /**
+     * Actualiza todos los elementos del dashboard.
+     */
     private void actualizarDashboard() {
         if (empresa != null) {
             empresaNombreText.setText(empresa.getNombre());
@@ -47,6 +71,10 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Actualiza todos los contadores del dashboard.
+     * En caso de error, establece valores por defecto.
+     */
     private void actualizarContadores() {
         try {
             actualizarContadorEmpleados();
@@ -59,6 +87,11 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Actualiza el contador de empleados totales.
+     *
+     * @throws DAOException Si hay un error al acceder a los datos
+     */
     private void actualizarContadorEmpleados() throws DAOException {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         List<Empleado> todosEmpleados = empleadoDAO.findAll();
@@ -68,6 +101,11 @@ public class EmpresaController {
         empleadosCantidadText.setText(String.valueOf(cantidadEmpleados));
     }
 
+    /**
+     * Actualiza el contador de empleados trabajando actualmente.
+     *
+     * @throws DAOException Si hay un error al acceder a los datos
+     */
     private void actualizarEmpleadosTrabajando() throws DAOException {
         PerteneceTurnoDAO perteneceTurnoDAO = new PerteneceTurnoDAO();
         List<PerteneceTurno> turnosHoy = perteneceTurnoDAO.findByFecha(LocalDate.now());
@@ -77,6 +115,11 @@ public class EmpresaController {
         empleadosTrabajandoText.setText(String.valueOf(empleadosTrabajando));
     }
 
+    /**
+     * Actualiza el contador de ausencias activas.
+     *
+     * @throws DAOException Si hay un error al acceder a los datos
+     */
     private void actualizarContadorAusencias() throws DAOException {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         AusenciaDAO ausenciaDAO = new AusenciaDAO(empleadoDAO);
@@ -87,6 +130,12 @@ public class EmpresaController {
         ausenciasCantidadText.setText(String.valueOf(ausenciasActivas));
     }
 
+    /**
+     * Verifica si una ausencia está activa para la empresa actual.
+     *
+     * @param ausencia La ausencia a verificar
+     * @return true si la ausencia está activa
+     */
     private boolean esAusenciaActiva(Ausencia ausencia) {
         try {
             return ausencia.getEmpleado().getEmpresa().getIdEmpresa() == empresa.getIdEmpresa() &&
@@ -96,12 +145,22 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de cierre de sesión.
+     *
+     * @throws IOException Si hay un error al cargar la vista de bienvenida
+     */
     @FXML
     private void handleLogout() throws IOException {
         UsuarioSesion.getInstance().logout();
         volverAPantallaBienvenida();
     }
 
+    /**
+     * Navega a la pantalla de bienvenida.
+     *
+     * @throws IOException Si hay un error al cargar la vista
+     */
     private void volverAPantallaBienvenida() throws IOException {
         FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("welcome-view.fxml"));
         Scene scene = new Scene(loader.load());
@@ -112,12 +171,20 @@ public class EmpresaController {
         stage.centerOnScreen();
     }
 
+    /**
+     * Configura la ventana principal con sus dimensiones por defecto.
+     *
+     * @param stage El Stage a configurar
+     */
     private void configurarVentanaPrincipal(Stage stage) {
         stage.setTitle("Gestión de Personal");
         stage.setWidth(1500);
         stage.setHeight(875);
     }
 
+    /**
+     * Maneja el evento de apertura de la gestión de empleados.
+     */
     @FXML
     private void handleGestionEmpleados() {
         try {
@@ -129,6 +196,9 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de apertura de la gestión de turnos.
+     */
     @FXML
     private void handleGestionTurnos() {
         try {
@@ -140,6 +210,9 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de apertura de la gestión de ausencias.
+     */
     @FXML
     private void handleGestionAusencias() {
         try {
@@ -154,6 +227,9 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de edición de la empresa.
+     */
     @FXML
     private void handleEditarEmpresa() {
         try {
@@ -176,6 +252,9 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de eliminación de la empresa.
+     */
     @FXML
     private void handleBorrarEmpresa() {
         try {
@@ -194,11 +273,20 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Verifica si la empresa tiene empleados asociados.
+     *
+     * @return true si la empresa tiene empleados
+     * @throws DAOException Si hay un error al acceder a los datos
+     */
     private boolean tieneEmpleadosAsociados() throws DAOException {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         return empleadoDAO.hayEmpleadosByEmpresa(empresa.getIdEmpresa());
     }
 
+    /**
+     * Muestra un diálogo de error cuando la empresa tiene empleados asociados.
+     */
     private void mostrarErrorEmpresaConEmpleados() {
         Alert error = new Alert(Alert.AlertType.ERROR);
         error.setTitle("Error al eliminar");
@@ -207,6 +295,11 @@ public class EmpresaController {
         error.showAndWait();
     }
 
+    /**
+     * Muestra un diálogo de confirmación para el borrado de la empresa.
+     *
+     * @return true si el usuario confirma el borrado
+     */
     private boolean confirmarBorradoEmpresa() {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar eliminación");
@@ -217,11 +310,19 @@ public class EmpresaController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
+    /**
+     * Elimina la empresa de la base de datos.
+     *
+     * @throws DAOException Si hay un error al eliminar la empresa
+     */
     private void borrarEmpresa() throws DAOException {
         EmpresaDAO empresaDAO = new EmpresaDAO();
         empresaDAO.delete(empresa);
     }
 
+    /**
+     * Maneja el evento de creación rápida de empleado.
+     */
     @FXML
     private void handleNuevoEmpleadoRapido() {
         try {
@@ -242,6 +343,9 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Maneja el evento de asignación rápida de turno.
+     */
     @FXML
     private void handleAsignarTurnoRapido() {
         try {
@@ -262,6 +366,12 @@ public class EmpresaController {
         }
     }
 
+    /**
+     * Crea un nuevo diálogo modal.
+     *
+     * @param titulo El título del diálogo
+     * @return El Stage configurado como diálogo modal
+     */
     private Stage crearDialogoModal(String titulo) {
         Stage stage = new Stage();
         stage.setTitle(titulo);
@@ -270,6 +380,12 @@ public class EmpresaController {
         return stage;
     }
 
+    /**
+     * Muestra un diálogo de error.
+     *
+     * @param header El encabezado del error
+     * @param content El contenido del mensaje de error
+     */
     private void mostrarError(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -278,12 +394,23 @@ public class EmpresaController {
         alert.showAndWait();
     }
 
+    /**
+     * Establece valores por defecto para los contadores.
+     */
     private void establecerValoresPorDefecto() {
         empleadosCantidadText.setText("0");
         empleadosTrabajandoText.setText("0");
         ausenciasCantidadText.setText("0");
     }
 
+    /**
+     * Abre una ventana de gestión genérica.
+     *
+     * @param fxmlFile El archivo FXML a cargar
+     * @param title El título de la ventana
+     * @param initializer El inicializador del controlador
+     * @throws IOException Si hay un error al cargar la vista
+     */
     private void abrirVentanaGestion(String fxmlFile, String title, ControllerInitializer initializer) throws IOException {
         FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource(fxmlFile));
         Scene scene = new Scene(loader.load());
@@ -297,8 +424,16 @@ public class EmpresaController {
         stage.show();
     }
 
+    /**
+     * Interfaz funcional para la inicialización de controladores.
+     */
     @FunctionalInterface
     private interface ControllerInitializer {
+        /**
+         * Inicializa un controlador.
+         *
+         * @param controller El controlador a inicializar
+         */
         void initialize(Object controller);
     }
 }

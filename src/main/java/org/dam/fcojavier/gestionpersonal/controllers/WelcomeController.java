@@ -9,12 +9,22 @@ import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
 
 import java.io.IOException;
 
+/**
+ * Controlador para la vista de bienvenida.
+ * Gestiona la pantalla inicial de la aplicación, proporcionando acceso
+ * a las funcionalidades de inicio de sesión y registro de usuarios.
+ */
 public class WelcomeController {
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Button registerButton;
+    /** Botón para iniciar sesión */
+    @FXML private Button loginButton;
+    
+    /** Botón para registrarse */
+    @FXML private Button registerButton;
 
+    /**
+     * Maneja el evento de clic en el botón de inicio de sesión.
+     * Muestra el diálogo de inicio de sesión.
+     */
     @FXML
     private void handleLoginClick() {
         try {
@@ -24,6 +34,10 @@ public class WelcomeController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón de registro.
+     * Muestra el diálogo de registro.
+     */
     @FXML
     private void handleRegistroClick() {
         try {
@@ -33,6 +47,11 @@ public class WelcomeController {
         }
     }
 
+    /**
+     * Muestra el diálogo de inicio de sesión.
+     *
+     * @throws IOException Si hay un error al cargar el archivo FXML
+     */
     private void mostrarDialogoLogin() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("login-dialog.fxml"));
         Dialog<ButtonType> dialog = crearDialogoBase("Iniciar Sesión", loginButton);
@@ -43,6 +62,12 @@ public class WelcomeController {
         dialog.showAndWait();
     }
 
+    /**
+     * Muestra el diálogo de registro.
+     * Si el registro no se completa correctamente, cierra el diálogo.
+     *
+     * @throws IOException Si hay un error al cargar el archivo FXML
+     */
     private void mostrarDialogoRegistro() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("registro-dialog.fxml"));
         Dialog<ButtonType> dialog = crearDialogoBase("Registro", registerButton);
@@ -60,6 +85,13 @@ public class WelcomeController {
             });
     }
 
+    /**
+     * Crea un diálogo base con configuración común para login y registro.
+     *
+     * @param titulo El título del diálogo
+     * @param owner El botón que sirve como propietario del diálogo
+     * @return El diálogo configurado
+     */
     private Dialog<ButtonType> crearDialogoBase(String titulo, Button owner) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle(titulo);
@@ -71,6 +103,13 @@ public class WelcomeController {
         return dialog;
     }
 
+    /**
+     * Configura el botón de inicio de sesión en el diálogo.
+     * Establece el texto y el manejador de eventos.
+     *
+     * @param dialog El diálogo que contiene el botón
+     * @param controller El controlador de login asociado
+     */
     private void configurarBotonLogin(Dialog<ButtonType> dialog, LoginController controller) {
         Button loginButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         loginButton.setText("Iniciar Sesión");
@@ -81,6 +120,13 @@ public class WelcomeController {
         });
     }
 
+    /**
+     * Configura el botón de registro en el diálogo.
+     * Establece el texto y el manejador de eventos.
+     *
+     * @param dialog El diálogo que contiene el botón
+     * @param controller El controlador de registro asociado
+     */
     private void configurarBotonRegistro(Dialog<ButtonType> dialog, RegistroController controller) {
         Button registroButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         registroButton.setText("Registrarse");
@@ -91,6 +137,12 @@ public class WelcomeController {
         });
     }
 
+    /**
+     * Muestra un diálogo de error.
+     *
+     * @param titulo El título del error
+     * @param mensaje El mensaje de error a mostrar
+     */
     private void mostrarError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
