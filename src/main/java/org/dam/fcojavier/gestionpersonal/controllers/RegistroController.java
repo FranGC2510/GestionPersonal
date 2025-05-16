@@ -12,6 +12,8 @@ import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import org.dam.fcojavier.gestionpersonal.utils.PasswordUtilidades;
 import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
 import org.dam.fcojavier.gestionpersonal.utils.Validacion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -21,6 +23,8 @@ import java.io.IOException;
  * de campos, creación de la cuenta y el inicio de sesión automático tras el registro.
  */
 public class RegistroController {
+
+    private static final Logger logger = LoggerFactory.getLogger(RegistroController.class);
     /** Campo de texto para el email */
     @FXML private TextField emailField;
     
@@ -61,14 +65,17 @@ public class RegistroController {
     @FXML
     protected void handleRegister() {
         ocultarError();
-        
+        logger.info("Iniciando proceso de registro de nueva empresa");
+
         if (!validarCampos()) {
+            logger.warn("Validación de campos fallida durante el registro");
             return;
         }
 
         try {
             if (procesarRegistro()) {
                 registroCompletado = true;
+                logger.info("Registro exitoso para el email: {}", emailField.getText());
                 Empresa empresaRegistrada = empresaDAO.findByEmail(emailField.getText());
                 iniciarSesionYMostrarPanel(empresaRegistrada);
             }
@@ -103,6 +110,7 @@ public class RegistroController {
     private boolean validarCamposRequeridos(String nombre, String email, String password, String direccion, String telefono) {
         if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() ||
                 direccion.isEmpty() || telefono.isEmpty()) {
+            logger.warn("Campos requeridos incompletos durante el registro");
             mostrarError("Por favor, complete todos los campos requeridos");
             return false;
         }
@@ -161,9 +169,11 @@ public class RegistroController {
      */
     private void iniciarSesionYMostrarPanel(Empresa empresa) {
         try {
+            logger.info("Iniciando sesión automática para la empresa recién registrada: {}", empresa.getNombre());
             UsuarioSesion.getInstance().loginEmpresa(empresa);
             cargarVistaPrincipal(empresa);
         } catch (IOException e) {
+            logger.error("Error al cargar la vista principal tras el registro", e);
             manejarErrorCargaVista();
         }
     }
@@ -201,6 +211,7 @@ public class RegistroController {
      * @throws IOException Si hay un error al cargar el archivo FXML
      */
     private void cargarVistaPrincipal(Empresa empresa) throws IOException {
+        logger.debug("Cargando vista principal para la empresa: {}", empresa.getNombre());
         FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
         Scene scene = new Scene(loader.load());
         
@@ -212,6 +223,7 @@ public class RegistroController {
         
         configurarVentanaPrincipal(mainStage, scene, empresa.getNombre());
         dialogStage.close();
+        logger.info("Vista principal cargada correctamente para: {}", empresa.getNombre());
     }
 
     /**
@@ -243,6 +255,7 @@ public class RegistroController {
      * Cierra la sesión y muestra un mensaje de error.
      */
     private void manejarErrorCargaVista() {
+        logger.error("Error fatal al cargar la vista principal - cerrando sesión");
         UsuarioSesion.getInstance().logout();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

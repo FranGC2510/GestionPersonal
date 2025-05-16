@@ -11,6 +11,8 @@ import org.dam.fcojavier.gestionpersonal.exceptions.DAOException;
 import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import org.dam.fcojavier.gestionpersonal.utils.PasswordUtilidades;
 import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ import java.io.IOException;
  * de la vista principal tras un inicio de sesión exitoso.
  */
 public class LoginController {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     /** Campo de texto para el email */
     @FXML private TextField emailField;
     
@@ -40,14 +44,17 @@ public class LoginController {
     protected void handleLogin() {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
+        logger.info("Intento de inicio de sesión para el email: {}", email);
 
         if (!validarCampos(email, password)) {
+            logger.warn("Intento de inicio de sesión fallido - campos inválidos");
             return;
         }
 
         try {
             procesarLogin(email, password);
         } catch (DAOException e) {
+            logger.error("Error durante el proceso de inicio de sesión", e);
             mostrarError("Error al iniciar sesión: " + e.getMessage());
         }
     }
@@ -78,15 +85,18 @@ public class LoginController {
         Empresa empresa = empresaDAO.findByEmail(email);
         
         if (empresa == null) {
+            logger.warn("Intento de inicio de sesión fallido - email no encontrado: {}", email);
             mostrarError("No se encuentra ninguna cuenta con este email");
             return;
         }
 
         if (!verificarPassword(password, empresa.getPassword())) {
+            logger.warn("Intento de inicio de sesión fallido - contraseña incorrecta para el email: {}", email);
             mostrarError("Contraseña incorrecta");
             return;
         }
 
+        logger.info("Inicio de sesión exitoso para la empresa: {}", empresa.getNombre());
         iniciarSesionEmpresa(empresa);
     }
 
@@ -98,8 +108,10 @@ public class LoginController {
     private void iniciarSesionEmpresa(Empresa empresa) {
         try {
             UsuarioSesion.getInstance().loginEmpresa(empresa);
+            logger.info("Sesión iniciada correctamente para la empresa: {}", empresa.getNombre());
             cargarVistaEmpresa(empresa);
         } catch (IOException ex) {
+            logger.error("Error al cargar la vista de empresa para: {}", empresa.getNombre(), ex);
             manejarErrorCargaVista();
         }
     }
@@ -144,6 +156,7 @@ public class LoginController {
      * Cierra la sesión y muestra un mensaje de error.
      */
     private void manejarErrorCargaVista() {
+        logger.error("Error fatal al cargar la vista principal - cerrando sesión");
         UsuarioSesion.getInstance().logout();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

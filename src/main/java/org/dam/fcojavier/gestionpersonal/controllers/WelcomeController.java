@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import org.dam.fcojavier.gestionpersonal.GestionPersonalApp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
  * a las funcionalidades de inicio de sesión y registro de usuarios.
  */
 public class WelcomeController {
+    private static final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
     /** Botón para iniciar sesión */
     @FXML private Button loginButton;
     
@@ -27,9 +30,11 @@ public class WelcomeController {
      */
     @FXML
     private void handleLoginClick() {
+        logger.info("Iniciando proceso de inicio de sesión");
         try {
             mostrarDialogoLogin();
         } catch (IOException e) {
+            logger.error("Error al cargar la ventana de inicio de sesión", e);
             mostrarError("Error", "No se pudo cargar la ventana de inicio de sesión.");
         }
     }
@@ -40,9 +45,11 @@ public class WelcomeController {
      */
     @FXML
     private void handleRegistroClick() {
+        logger.info("Iniciando proceso de registro");
         try {
             mostrarDialogoRegistro();
         } catch (IOException e) {
+            logger.error("Error al cargar la ventana de registro", e);
             mostrarError("Error", "No se pudo cargar la ventana de registro.");
         }
     }
@@ -53,12 +60,14 @@ public class WelcomeController {
      * @throws IOException Si hay un error al cargar el archivo FXML
      */
     private void mostrarDialogoLogin() throws IOException {
+        logger.debug("Cargando diálogo de inicio de sesión");
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("login-dialog.fxml"));
         Dialog<ButtonType> dialog = crearDialogoBase("Iniciar Sesión", loginButton);
         dialog.getDialogPane().setContent(fxmlLoader.load());
         
         configurarBotonLogin(dialog, fxmlLoader.getController());
-        
+
+        logger.debug("Mostrando diálogo de inicio de sesión");
         dialog.showAndWait();
     }
 
@@ -69,17 +78,20 @@ public class WelcomeController {
      * @throws IOException Si hay un error al cargar el archivo FXML
      */
     private void mostrarDialogoRegistro() throws IOException {
+        logger.debug("Cargando diálogo de registro");
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("registro-dialog.fxml"));
         Dialog<ButtonType> dialog = crearDialogoBase("Registro", registerButton);
         dialog.getDialogPane().setContent(fxmlLoader.load());
         
         configurarBotonRegistro(dialog, fxmlLoader.getController());
-        
+
+        logger.debug("Mostrando diálogo de registro");
         dialog.showAndWait()
             .filter(response -> response == ButtonType.OK)
             .ifPresent(response -> {
                 RegistroController controller = fxmlLoader.getController();
                 if (!controller.isRegistroCompletado()) {
+                    logger.info("Registro no completado, cerrando diálogo");
                     dialog.close();
                 }
             });
@@ -93,6 +105,7 @@ public class WelcomeController {
      * @return El diálogo configurado
      */
     private Dialog<ButtonType> crearDialogoBase(String titulo, Button owner) {
+        logger.debug("Creando diálogo base con título: {}", titulo);
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle(titulo);
         dialog.initStyle(StageStyle.UNIFIED);
@@ -111,6 +124,7 @@ public class WelcomeController {
      * @param controller El controlador de login asociado
      */
     private void configurarBotonLogin(Dialog<ButtonType> dialog, LoginController controller) {
+        logger.debug("Configurando botón de inicio de sesión");
         Button loginButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         loginButton.setText("Iniciar Sesión");
         
@@ -128,6 +142,7 @@ public class WelcomeController {
      * @param controller El controlador de registro asociado
      */
     private void configurarBotonRegistro(Dialog<ButtonType> dialog, RegistroController controller) {
+        logger.debug("Configurando botón de registro");
         Button registroButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         registroButton.setText("Registrarse");
         
@@ -144,6 +159,7 @@ public class WelcomeController {
      * @param mensaje El mensaje de error a mostrar
      */
     private void mostrarError(String titulo, String mensaje) {
+        logger.error("Error en la interfaz: {} - {}", titulo, mensaje);
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(titulo);
