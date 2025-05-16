@@ -1,6 +1,4 @@
-```
-
-  # Gestión de Personal y Turnos Empresariales
+# Gestión de Personal y Turnos Empresariales
 
 Aplicación JavaFX que permite gestionar empleados, turnos y ausencias para empresas.
 Incluye persistencia de datos mediante MySQL y gestión de sesiones con patrón Singleton.
@@ -14,11 +12,12 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
 ### Tipos de Usuarios
 
 - **Empresas**:
+
   - Gestionan sus empleados y departamentos
   - Crean y asignan turnos
   - Administran ausencias del personal
-
 - **Empleados**:
+
   - Pueden ser Supervisores o Empleados regulares
   - Visualizan sus turnos asignados
   - Solicitan y gestionan ausencias
@@ -26,16 +25,17 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
 ### Características Principales
 
 - **Sistema de Autenticación**:
+
   - Protección mediante email y contraseña
   - Encriptación segura de contraseñas con BCrypt
   - Validación de datos de usuario
-
 - **Gestión de Personal**:
+
   - Control de empleados activos/inactivos
   - Asignación de roles y departamentos
   - Seguimiento de ausencias
-
 - **Persistencia de Datos**:
+
   - Almacenamiento en base de datos MySQL
   - Gestión de conexiones segura
   - Logging de operaciones críticas
@@ -45,6 +45,7 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
 ## Tecnologías Detalladas
 
 ### Java Core
+
 - Versión: Java 23
 - Características utilizadas:
   - Collections Framework
@@ -52,6 +53,7 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
   - Manejo de excepciones personalizadas
 
 ### JavaFX
+
 - Versión: 17.0.12
 - Componentes:
   - FXML para diseño de interfaces
@@ -59,6 +61,7 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
   - Controladores para lógica de UI
 
 ### MySQL
+
 - Versión: 8.0.33
 - Características:
   - Conexiones pooling
@@ -66,6 +69,7 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
   - Claves foráneas y CASCADE
 
 ### Otras Tecnologías
+
 - SLF4J y Logback para logging
 - JBCrypt para encriptación
 - JAXB para configuración XML
@@ -78,6 +82,7 @@ El proyecto consiste en el desarrollo de una aplicación para la gestión de per
 La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y el motor InnoDB. Se compone de las siguientes tablas:
 
 ### Tabla `empresa`
+
 - Almacena información de empresas registradas
 - Campos principales:
   - `id_empresa`: Identificador único
@@ -86,6 +91,7 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
   - `password_hash`: Contraseña encriptada
 
 ### Tabla `empleado`
+
 - Registro de empleados de cada empresa
 - Campos principales:
   - `id_usuario`: Identificador único
@@ -94,6 +100,7 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
   - `id_empresa`: Empresa a la que pertenece
 
 ### Tabla `ausencia`
+
 - Control de ausencias del personal
 - Campos principales:
   - `motivo`: Razón de la ausencia
@@ -101,12 +108,14 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
   - `id_empleado`: Empleado ausente
 
 ### Tabla `turno`
+
 - Definición de turnos de trabajo
 - Campos principales:
   - `descripcion`: Nombre del turno
   - `hora_inicio` y `hora_fin`: Horario
 
 ### Tabla `pertenece`
+
 - Asignación de turnos a empleados
 - Relación many-to-many entre empleados y turnos
 - Incluye fecha específica de asignación
@@ -146,7 +155,7 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
 2. Crear la base de datos usando el script proporcionado
 3. Configurar `connection.xml` con los datos de conexión
 4. Ejecutar con Maven: bash mvn clean install mvn javafx:run
-        
+
 ---
 
 ## Consideraciones
@@ -164,5 +173,3 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
 - Hecho por:
   - Fco Javier García Cañero
 - Proyecto académico para IES Francisco de los Rios
-
-```
