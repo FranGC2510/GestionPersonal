@@ -13,7 +13,7 @@ public class GestionPersonalApp extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GestionPersonalApp.class.getResource("welcome-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Gestión de Personal");
+        stage.setTitle("GestorRH - Sistema de Gestión de Recursos Humanos");
         stage.setScene(scene);
         stage.setWidth(1500);
         stage.setHeight(875);

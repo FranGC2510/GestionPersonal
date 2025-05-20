@@ -10,13 +10,37 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que implementa el acceso a datos para la entidad Turno.
+ * Proporciona operaciones CRUD para gestionar los turnos de trabajo en la base de datos.
+ * Los turnos representan períodos de tiempo con hora de inicio y fin.
+ *
+ */
 public class TurnoDAO implements CrudDAO<Turno> {
+
+    /** Consulta SQL para insertar un nuevo turno */
     private final String insert_SQL = "INSERT INTO turno (descripcion, hora_inicio, hora_fin) VALUES (?, ?, ?)";
+    
+    /** Consulta SQL para actualizar un turno existente */
     private final String update_SQL = "UPDATE turno SET descripcion = ?, hora_inicio = ?, hora_fin = ? WHERE id_turno = ?";
+    
+    /** Consulta SQL para eliminar un turno */
     private final String delete_SQL = "DELETE FROM turno WHERE id_turno = ?";
+    
+    /** Consulta SQL para buscar un turno por su ID */
     private final String findById_SQL = "SELECT * FROM turno WHERE id_turno = ?";
+    
+    /** Consulta SQL para obtener todos los turnos */
     private final String findAll_SQL = "SELECT * FROM turno";
 
+    /**
+     * Inserta un nuevo turno en la base de datos.
+     * Verifica que el turno no exista previamente por su ID.
+     *
+     * @param turno El turno a insertar
+     * @return El turno insertado con su ID generado, o null si ya existe
+     * @throws DAOException Si ocurre un error durante la inserción
+     */
     @Override
     public Turno insert(Turno turno) throws DAOException {
         Turno turnoInsertado = null;
@@ -43,6 +67,13 @@ public class TurnoDAO implements CrudDAO<Turno> {
 
     }
 
+    /**
+     * Actualiza un turno existente en la base de datos.
+     *
+     * @param turno El turno con los nuevos datos
+     * @return El turno actualizado, o null si no existe
+     * @throws DAOException Si ocurre un error durante la actualización o si el turno no existe
+     */
     @Override
     public Turno update(Turno turno) throws DAOException {
         Turno turnoActualizado = null;
@@ -71,6 +102,14 @@ public class TurnoDAO implements CrudDAO<Turno> {
 
     }
 
+    /**
+     * Elimina un turno de la base de datos.
+     * La eliminación también eliminará todas las asignaciones asociadas a este turno.
+     *
+     * @param turno El turno a eliminar
+     * @return true si se eliminó correctamente, false en caso contrario
+     * @throws DAOException Si ocurre un error durante la eliminación
+     */
     @Override
     public boolean delete(Turno turno) throws DAOException {
         boolean deleted = false;
@@ -93,6 +132,13 @@ public class TurnoDAO implements CrudDAO<Turno> {
 
     }
 
+    /**
+     * Busca un turno por su ID.
+     *
+     * @param id ID del turno a buscar
+     * @return El turno encontrado, o null si no existe
+     * @throws DAOException Si ocurre un error durante la búsqueda
+     */
     @Override
     public Turno findById(int id) throws DAOException {
         Turno turno = null;
@@ -117,6 +163,12 @@ public class TurnoDAO implements CrudDAO<Turno> {
 
     }
 
+    /**
+     * Obtiene todos los turnos registrados en la base de datos.
+     *
+     * @return Lista de todos los turnos
+     * @throws DAOException Si ocurre un error al obtener los datos
+     */
     @Override
     public List<Turno> findAll() throws DAOException {
         List<Turno> turnos = new ArrayList<>();

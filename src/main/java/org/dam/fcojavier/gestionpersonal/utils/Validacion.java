@@ -1,5 +1,11 @@
 package org.dam.fcojavier.gestionpersonal.utils;
 
+/**
+ * Clase de utilidad que proporciona métodos estáticos para validar diferentes tipos
+ * de datos de usuario, como correos electrónicos, números de teléfono y contraseñas.
+ * También proporciona mensajes de error predefinidos para cada tipo de validación.
+ *
+ */
 public class Validacion {
     // Constantes para los mensajes de error
     public static final String ERROR_EMAIL = "El formato del email no es válido";

@@ -6,6 +6,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.DropShadow?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.dam.fcojavier.gestionpersonal.controllers.WelcomeController"
       style="-fx-background-color: #f8f9fa;"
@@ -13,14 +14,22 @@
 
     <!-- Cabecera -->
     <VBox VBox.vgrow="NEVER">
-        <!-- Barra principal con degradado -->
+        <!-- Modificar la sección de la cabecera -->
         <StackPane style="-fx-background-color: linear-gradient(to right, #1a237e, #283593);">
             <Rectangle width="800" height="200" fill="transparent"/>
-            <VBox alignment="CENTER" spacing="10">
-                <Text text="Gestión de Personal"
-                      style="-fx-fill: white; -fx-font-size: 42px; -fx-font-weight: bold;"/>
-                <Text text="Sistema integral de administración empresarial"
-                      style="-fx-fill: white; -fx-font-size: 18px;"/>
+            <VBox alignment="CENTER" spacing="15">
+                <Text text="GestorRH"
+                      style="-fx-fill: white; -fx-font-size: 64px; -fx-font-weight: bold; -fx-font-family: 'System';">
+                    <effect>
+                        <DropShadow color="#00000066" radius="10" spread="0.2"/>
+                    </effect>
+                </Text>
+                <Text text="Sistema Integral de Recursos Humanos"
+                      style="-fx-fill: white; -fx-font-size: 24px; -fx-font-family: 'System';">
+                    <effect>
+                        <DropShadow color="#00000040" radius="5"/>
+                    </effect>
+                </Text>
             </VBox>
         </StackPane>
     </VBox>
@@ -103,7 +112,16 @@
 
     <!-- Pie de página -->
     <HBox alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #283593;" VBox.vgrow="NEVER">
-        <Text text="© 2025 Gestión de Personal. Todos los derechos reservados."
-              style="-fx-fill: white; -fx-font-size: 12px;"/>
+        <HBox alignment="CENTER" spacing="20">
+            <Text text="GestorRH" 
+                  style="-fx-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;">
+                <effect>
+                    <DropShadow color="#00000040" radius="2"/>
+                </effect>
+            </Text>
+            <Text text="•" style="-fx-fill: white;"/>
+            <Text text="© 2025 Todos los derechos reservados" 
+                  style="-fx-fill: white; -fx-font-size: 12px;"/>
+        </HBox>
     </HBox>
 </VBox>

@@ -12,182 +12,273 @@ import org.dam.fcojavier.gestionpersonal.model.Empresa;
 import org.dam.fcojavier.gestionpersonal.utils.PasswordUtilidades;
 import org.dam.fcojavier.gestionpersonal.utils.UsuarioSesion;
 import org.dam.fcojavier.gestionpersonal.utils.Validacion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * Controlador para el diálogo de registro de empresas.
+ * Gestiona el proceso de registro de nuevas empresas, incluyendo la validación
+ * de campos, creación de la cuenta y el inicio de sesión automático tras el registro.
+ */
 public class RegistroController {
-    @FXML
-    private TextField emailField;
 
-    @FXML
-    private PasswordField passwordField;
+    private static final Logger logger = LoggerFactory.getLogger(RegistroController.class);
+    /** Campo de texto para el email */
+    @FXML private TextField emailField;
+    
+    /** Campo para la contraseña */
+    @FXML private PasswordField passwordField;
+    
+    /** Campo para confirmar la contraseña */
+    @FXML private PasswordField confirmaPasswordField;
+    
+    /** Campo para el nombre de la empresa */
+    @FXML private TextField nombreEmpresaField;
+    
+    /** Campo para la dirección de la empresa */
+    @FXML private TextField direccionEmpresaField;
+    
+    /** Campo para el teléfono de la empresa */
+    @FXML private TextField telefonoEmpresaField;
+    
+    /** Etiqueta para mostrar mensajes de error */
+    @FXML private Label mensajeError;
 
-    @FXML
-    private PasswordField confirmaPasswordField;
-
-    @FXML
-    private TextField nombreEmpresaField;
-
-    @FXML
-    private TextField direccionEmpresaField;
-
-    @FXML
-    private TextField telefonoEmpresaField;
-
-    @FXML
-    private Label mensajeError;
-
+    /** DAO para acceder a los datos de empresas */
     private final EmpresaDAO empresaDAO = new EmpresaDAO();
+    
+    /** Ancho predeterminado de la ventana principal */
+    private static final int VENTANA_ANCHO = 1500;
+    
+    /** Alto predeterminado de la ventana principal */
+    private static final int VENTANA_ALTO = 875;
+    
+    /** Indica si el registro se completó exitosamente */
+    private boolean registroCompletado = false;
 
+    /**
+     * Maneja el evento de registro.
+     * Valida los campos, procesa el registro y muestra la vista principal si es exitoso.
+     */
     @FXML
     protected void handleRegister() {
-        // Limpiar mensaje de error anterior
-        mensajeError.setVisible(false);
+        ocultarError();
+        logger.info("Iniciando proceso de registro de nueva empresa");
 
-        // Validar campos comunes
-        if (!validarCamposComunes()) {
+        if (!validarCampos()) {
+            logger.warn("Validación de campos fallida durante el registro");
             return;
         }
 
         try {
-            // Verificar que el email no existe
-            if (emailExiste(emailField.getText())) {
-                mostrarError("Ya existe una cuenta con este email");
-                return;
+            if (procesarRegistro()) {
+                registroCompletado = true;
+                logger.info("Registro exitoso para el email: {}", emailField.getText());
+                Empresa empresaRegistrada = empresaDAO.findByEmail(emailField.getText());
+                iniciarSesionYMostrarPanel(empresaRegistrada);
             }
-
-            // Registrar empresa
-            registrarEmpresa();
-
-            // Si llegamos aquí, el registro fue exitoso
-            Empresa empresaRegistrada = empresaDAO.findByEmail(emailField.getText());
-            // Iniciar sesión en el SessionManager
-            UsuarioSesion.getInstance().loginEmpresa(empresaRegistrada);
-
-            try {
-                // Cargar la vista de empresa
-                FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
-                Scene scene = new Scene(loader.load());
-
-                // Obtener el controlador y establecer la empresa
-                EmpresaController controller = loader.getController();
-                controller.setEmpresa(empresaRegistrada);
-
-                // Obtener la ventana principal (welcome-view) y cambiar la escena
-                Stage dialogStage = (Stage) emailField.getScene().getWindow();
-                Stage mainStage = (Stage) dialogStage.getOwner();
-                mainStage.setScene(scene);
-                mainStage.setTitle("Panel de Empresa - " + empresaRegistrada.getNombre());
-                mainStage.setWidth(1500);
-                mainStage.setHeight(875);
-                mainStage.centerOnScreen();
-
-                // Cerrar el diálogo de registro
-                dialogStage.close();
-            } catch (IOException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error al cargar la vista de empresa");
-                alert.setContentText("Ha ocurrido un error al intentar cargar la vista. Por favor, inicie sesión manualmente.");
-                alert.showAndWait();
-                // Cerrar la sesión si hubo error al cargar la vista
-                UsuarioSesion.getInstance().logout();
-                // Cerrar solo el diálogo
-                Stage dialogStage = (Stage) emailField.getScene().getWindow();
-                dialogStage.close();
-            }
-
         } catch (DAOException e) {
             mostrarError("Error al registrar: " + e.getMessage());
         }
     }
 
-    private boolean validarCamposComunes() {
-        String nombre = nombreEmpresaField.getText();
-        String email = emailField.getText();
+    /**
+     * Valida todos los campos del formulario.
+     *
+     * @return true si todos los campos son válidos, false en caso contrario
+     */
+    private boolean validarCampos() {
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmaPassword = confirmaPasswordField.getText();
-        String direccion = direccionEmpresaField.getText();
-        String telefono = telefonoEmpresaField.getText();
-        boolean flag= true;
+        String nombre = nombreEmpresaField.getText().trim();
+        String direccion = direccionEmpresaField.getText().trim();
+        String telefono = telefonoEmpresaField.getText().trim();
 
-        if (nombre.isEmpty() || email.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
-            mostrarError("Por favor, complete todos los campos requeridos");
-            flag= false;
+        if (!validarCamposRequeridos(nombre, email, password, direccion, telefono) ||
+            !validarFormatoEmail(email) ||
+            !validarPassword(password, confirmaPassword) ||
+            !validarTelefono(telefono)) {
+            return false;
         }
 
-        // Validar email
-        if (email.isEmpty()) {
-            mostrarError("Por favor, ingrese un email");
-            flag= false;
-        }else if (!Validacion.isValidoEmail(email)) {
-            mostrarError(Validacion.validateEmail(email));
-            flag= false;
-        }
-
-        // Validar contraseña
-        if (password.isEmpty()) {
-            mostrarError("Por favor, ingrese una contraseña");
-            flag= false;
-        }else if(!Validacion.isValidaPassword(password)){
-            mostrarError(Validacion.validaPassword(password));
-            flag= false;
-        }
-
-        // Validar confirmación de contraseña
-        if (!password.equals(confirmaPassword)) {
-            mostrarError("Las contraseñas no coinciden");
-            flag= false;
-        }
-
-        if (direccion.isEmpty()) {
-            mostrarError("Por favor, ingrese la dirección de la empresa");
-            flag= false;
-        }
-        if (telefono.isEmpty()) {
-            mostrarError("Por favor, ingrese el teléfono de la empresa");
-            flag= false;
-        }else if(!Validacion.isValidoTelefono(telefono)){
-            mostrarError(Validacion.validateTelefono(telefono));
-            flag= false;
-        }
-
-        return flag;
+        return true;
     }
 
+    private boolean validarCamposRequeridos(String nombre, String email, String password, String direccion, String telefono) {
+        if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() ||
+                direccion.isEmpty() || telefono.isEmpty()) {
+            logger.warn("Campos requeridos incompletos durante el registro");
+            mostrarError("Por favor, complete todos los campos requeridos");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarFormatoEmail(String email) {
+        if (!Validacion.isValidoEmail(email)) {
+            mostrarError(Validacion.validateEmail(email));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarPassword(String password, String confirmaPassword) {
+        if (!Validacion.isValidaPassword(password)) {
+            mostrarError(Validacion.validaPassword(password));
+            return false;
+        }
+
+        if (!password.equals(confirmaPassword)) {
+            mostrarError("Las contraseñas no coinciden");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarTelefono(String telefono) {
+        if (!Validacion.isValidoTelefono(telefono)) {
+            mostrarError(Validacion.validateTelefono(telefono));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Procesa el registro de la nueva empresa.
+     *
+     * @return true si el registro fue exitoso
+     * @throws DAOException Si hay un error al acceder a la base de datos
+     */
+    private boolean procesarRegistro() throws DAOException {
+        if (emailExiste(emailField.getText())) {
+            mostrarError("Ya existe una cuenta con este email");
+            return false;
+        }
+
+        Empresa empresa = crearEmpresa();
+        return empresaDAO.insert(empresa) != null;
+    }
+
+    /**
+     * Inicia sesión con la empresa registrada y muestra su panel principal.
+     *
+     * @param empresa La empresa registrada
+     */
+    private void iniciarSesionYMostrarPanel(Empresa empresa) {
+        try {
+            logger.info("Iniciando sesión automática para la empresa recién registrada: {}", empresa.getNombre());
+            UsuarioSesion.getInstance().loginEmpresa(empresa);
+            cargarVistaPrincipal(empresa);
+        } catch (IOException e) {
+            logger.error("Error al cargar la vista principal tras el registro", e);
+            manejarErrorCargaVista();
+        }
+    }
+
+    /**
+     * Crea una nueva instancia de Empresa con los datos del formulario.
+     *
+     * @return La nueva instancia de Empresa
+     */
+    private Empresa crearEmpresa() {
+        Empresa empresa = new Empresa();
+        empresa.setEmail(emailField.getText().trim());
+        empresa.setPassword(PasswordUtilidades.hashPassword(passwordField.getText()));
+        empresa.setNombre(nombreEmpresaField.getText().trim());
+        empresa.setDireccion(direccionEmpresaField.getText().trim());
+        empresa.setTelefono(telefonoEmpresaField.getText().trim());
+        return empresa;
+    }
+
+    /**
+     * Verifica si ya existe una empresa con el email proporcionado.
+     *
+     * @param email El email a verificar
+     * @return true si el email ya existe
+     * @throws DAOException Si hay un error al acceder a la base de datos
+     */
     private boolean emailExiste(String email) throws DAOException {
         return empresaDAO.findByEmail(email) != null;
     }
 
-    private void registrarEmpresa() throws DAOException {
-        // Validar campos de empresa
-        if (nombreEmpresaField.getText().isEmpty()) {
-            mostrarError("Por favor, ingrese el nombre de la empresa");
-            return;
-        }
-        if (direccionEmpresaField.getText().isEmpty()) {
-            mostrarError("Por favor, ingrese la dirección de la empresa");
-            return;
-        }
-        if (telefonoEmpresaField.getText().isEmpty()) {
-            mostrarError("Por favor, ingrese el teléfono de la empresa");
-            return;
-        }
+    /**
+     * Carga la vista principal de la empresa.
+     *
+     * @param empresa La empresa registrada
+     * @throws IOException Si hay un error al cargar el archivo FXML
+     */
+    private void cargarVistaPrincipal(Empresa empresa) throws IOException {
+        logger.debug("Cargando vista principal para la empresa: {}", empresa.getNombre());
+        FXMLLoader loader = new FXMLLoader(GestionPersonalApp.class.getResource("empresa-view.fxml"));
+        Scene scene = new Scene(loader.load());
+        
+        EmpresaController controller = loader.getController();
+        controller.setEmpresa(empresa);
 
-        // Crear y guardar empresa
-        Empresa empresa = new Empresa();
-        empresa.setEmail(emailField.getText());
-        String hashedPassword = PasswordUtilidades.hashPassword(passwordField.getText());
-        empresa.setPassword(hashedPassword);
-        empresa.setNombre(nombreEmpresaField.getText());
-        empresa.setDireccion(direccionEmpresaField.getText());
-        empresa.setTelefono(telefonoEmpresaField.getText());
-
-        if (empresaDAO.insert(empresa) == null) {
-            throw new DAOException("No se pudo registrar la empresa", null);
-        }
+        Stage dialogStage = (Stage) emailField.getScene().getWindow();
+        Stage mainStage = (Stage) dialogStage.getOwner();
+        
+        configurarVentanaPrincipal(mainStage, scene, empresa.getNombre());
+        dialogStage.close();
+        logger.info("Vista principal cargada correctamente para: {}", empresa.getNombre());
     }
 
+    /**
+     * Configura la ventana principal de la aplicación.
+     *
+     * @param stage El Stage principal
+     * @param scene La Scene a mostrar
+     * @param nombreEmpresa El nombre de la empresa para el título
+     */
+    private void configurarVentanaPrincipal(Stage stage, Scene scene, String nombreEmpresa) {
+        stage.setScene(scene);
+        stage.setTitle("Panel de Empresa - " + nombreEmpresa);
+        stage.setWidth(VENTANA_ANCHO);
+        stage.setHeight(VENTANA_ALTO);
+        stage.centerOnScreen();
+    }
+
+    /**
+     * Verifica si el registro se completó exitosamente.
+     *
+     * @return true si el registro se completó correctamente
+     */
+    public boolean isRegistroCompletado() {
+        return registroCompletado;
+    }
+
+    /**
+     * Maneja los errores que pueden ocurrir al cargar la vista principal.
+     * Cierra la sesión y muestra un mensaje de error.
+     */
+    private void manejarErrorCargaVista() {
+        logger.error("Error fatal al cargar la vista principal - cerrando sesión");
+        UsuarioSesion.getInstance().logout();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error al cargar la vista de empresa");
+        alert.setContentText("Ha ocurrido un error al intentar cargar la vista. Por favor, inicie sesión manualmente.");
+        alert.showAndWait();
+        
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        stage.close();
+    }
+
+    /**
+     * Oculta el mensaje de error en la interfaz.
+     */
+    private void ocultarError() {
+        mensajeError.setVisible(false);
+    }
+
+    /**
+     * Muestra un mensaje de error en la interfaz.
+     *
+     * @param mensaje El mensaje de error a mostrar
+     */
     private void mostrarError(String mensaje) {
         mensajeError.setText(mensaje);
         mensajeError.setVisible(true);

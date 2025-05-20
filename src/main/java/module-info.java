@@ -5,6 +5,7 @@ module org.dam.fcojavier.gestionpersonal {
     requires java.base;
     requires java.xml.bind;
     requires java.sql;
+    requires org.slf4j;
 
 
     opens org.dam.fcojavier.gestionpersonal to javafx.fxml;

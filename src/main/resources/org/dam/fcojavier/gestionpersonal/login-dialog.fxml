@@ -1,35 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 
-<DialogPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.dam.fcojavier.gestionpersonal.controllers.LoginController"
-            prefWidth="300"
-            minHeight="250">
+<DialogPane minHeight="250" prefWidth="300" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dam.fcojavier.gestionpersonal.controllers.LoginController">
     <content>
-        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20;" prefWidth="280" prefHeight="200" minHeight="200">
+        <VBox alignment="CENTER" minHeight="200" prefHeight="200" prefWidth="280" spacing="15.0" style="-fx-padding: 20;">
             <!-- Título -->
-            <Text text="Iniciar Sesión"
-                  style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Iniciar Sesión" />
 
             <!-- Campos de entrada -->
-            <TextField fx:id="emailField"
-                       promptText="Email"
-                       style="-fx-pref-width: 250;"/>
+            <TextField fx:id="emailField" promptText="Email" style="-fx-pref-width: 250;" />
 
-            <PasswordField fx:id="passwordField"
-                           promptText="Contraseña"
-                           style="-fx-pref-width: 250;"/>
+            <PasswordField fx:id="passwordField" promptText="Contraseña" style="-fx-pref-width: 250;" />
 
             <!-- Mensaje de error -->
-            <Label fx:id="mensajeError"
-                   style="-fx-text-fill: red; -fx-pref-width: 250;"
-                   visible="false"
-                   wrapText="true"/>
+            <Label fx:id="mensajeError" style="-fx-text-fill: red; -fx-pref-width: 250;" visible="false" wrapText="true" />
         </VBox>
     </content>
 
