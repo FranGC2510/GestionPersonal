@@ -17,7 +17,6 @@ import java.util.List;
  * Clase que implementa el acceso a datos para la entidad Empleado.
  * Proporciona operaciones CRUD y consultas específicas para gestionar los empleados
  * en la base de datos. Implementa la interfaz CrudDAO para operaciones básicas.
- *
  */
 public class EmpleadoDAO implements CrudDAO<Empleado> {
 

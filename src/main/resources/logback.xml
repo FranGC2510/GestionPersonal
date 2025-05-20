@@ -1,4 +1,17 @@
 <configuration>
+    <!-- Appender para la consola -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- Filtro para excluir los errores de la consola -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+    </appender>
+
     <!-- Appender para errores -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/errores.log</file>
@@ -11,15 +24,21 @@
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
     </appender>
 
     <!-- Logger para los controladores -->
     <logger name="org.dam.fcojavier.gestionpersonal.controllers" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="ERROR_FILE" />
+
     </logger>
 
     <!-- Configuración raíz para errores -->
-    <root level="ERROR">
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="ERROR_FILE" />
     </root>
 </configuration>

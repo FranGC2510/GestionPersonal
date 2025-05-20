@@ -11,9 +11,9 @@
             <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Iniciar Sesión" />
 
             <!-- Campos de entrada -->
-            <TextField fx:id="emailField" promptText="Email" style="-fx-pref-width: 250;" text="test@test.com" />
+            <TextField fx:id="emailField" promptText="Email" style="-fx-pref-width: 250;" />
 
-            <PasswordField fx:id="passwordField" promptText="Contraseña" style="-fx-pref-width: 250;" text="123456Aa" />
+            <PasswordField fx:id="passwordField" promptText="Contraseña" style="-fx-pref-width: 250;" />
 
             <!-- Mensaje de error -->
             <Label fx:id="mensajeError" style="-fx-text-fill: red; -fx-pref-width: 250;" visible="false" wrapText="true" />

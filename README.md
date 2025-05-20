@@ -1,4 +1,4 @@
-# Gestor de Personal y Turnos Empresariales
+# GestorRH. Gestor de Personal y Turnos Empresariales
 
 Aplicación de escritorio en Java que permite gestionar empresas, empleados, turnos y ausencias.  
 Incluye autenticación jerárquica, asignación de roles y persistencia en base de datos MySQL.
@@ -7,7 +7,7 @@ Incluye autenticación jerárquica, asignación de roles y persistencia en base 
 
 ## Descripción
 
-El proyecto consiste en el desarrollo de una aplicación para la gestión de personal dentro de una o varias empresas. Está centrado en la administración eficiente de empleados, horarios laborales y solicitudes de ausencia, permitiendo una visión estructurada según el rol del usuario.
+El proyecto consiste en el desarrollo de una aplicación, **GestorRH**, para la gestión de personal dentro de una o varias empresas. Está centrado en la administración eficiente de empleados, horarios laborales y solicitudes de ausencia, permitiendo una visión estructurada según el rol del usuario.
 
 ### Tipos de Usuarios
 
@@ -92,6 +92,7 @@ Incluye las entidades Empresa, Empleado, Turno, Ausencia, y sus relaciones DAO/V
 
 ### Diagrama de Casos de Uso
 Muestra los distintos casos de uso disponibles para cada tipo de usuario (empresa, supervisor, empleado).
+![CasosUso.png](documentacion/CasosUso.png)
 
 ### Diagrama Entidad-Relación (Base de Datos)
 Representa las tablas empresa, empleado, ausencia, turno, pertenece y sus relaciones mediante claves foráneas.
@@ -156,18 +157,6 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
 - **enums/**: Enumeraciones
 
 ---
-
-## Funcionalidades principales
-
-- Registro e inicio de sesión de empresas
-- Gestión completa de empleados
-- Control de turnos y horarios
-- Registro y seguimiento de ausencias
-- Sistema de roles y permisos
-- Logging de operaciones críticas
-- Interfaz gráfica intuitiva
-
----
 ## Requisitos y Ejecución
 
 ### Requisitos
@@ -189,6 +178,17 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
    ```
 
 ---
+## Funcionalidades principales
+
+- Registro e inicio de sesión de empresas
+- Gestión completa de empleados
+- Control de turnos y horarios
+- Registro y seguimiento de ausencias
+- Sistema de roles y permisos
+- Logging de operaciones críticas
+- Interfaz gráfica intuitiva
+
+---
 ## Consideraciones
 
 - Las contraseñas se almacenan encriptadas con BCrypt
@@ -203,10 +203,11 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
 **Estado**: En desarrollo activo
 
 **Pendiente**:
-- Informes en PDF
+- Exportación de informes
 - Notificaciones por email
 - Sistema de fichaje
 - Calendario visual de turnos
+- Implementación de login para más usuarios (empleados y supervisores)
 
 ---
 ## Autor
