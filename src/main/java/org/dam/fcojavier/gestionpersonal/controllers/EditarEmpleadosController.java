@@ -77,22 +77,10 @@ public class EditarEmpleadosController {
      */
     private void configurarValidaciones() {
         validaciones = new HashMap<>();
-        validaciones.put(nombreField, new ValidacionCampo(
-                texto -> !texto.trim().isEmpty(),
-                "El nombre es obligatorio"
-        ));
-        validaciones.put(apellidoField, new ValidacionCampo(
-                texto -> !texto.trim().isEmpty(),
-                "El apellido es obligatorio"
-        ));
-        validaciones.put(emailField, new ValidacionCampo(
-                Validacion::isValidoEmail,
-                Validacion.ERROR_EMAIL
-        ));
-        validaciones.put(telefonoField, new ValidacionCampo(
-                Validacion::isValidoTelefono,
-                Validacion.ERROR_TELEFONO
-        ));
+        validaciones.put(nombreField, new ValidacionCampo(texto -> !texto.trim().isEmpty(), "El nombre es obligatorio"));
+        validaciones.put(apellidoField, new ValidacionCampo(texto -> !texto.trim().isEmpty(), "El apellido es obligatorio"));
+        validaciones.put(emailField, new ValidacionCampo(Validacion::isValidoEmail, Validacion.ERROR_EMAIL));
+        validaciones.put(telefonoField, new ValidacionCampo(Validacion::isValidoTelefono, Validacion.ERROR_TELEFONO));
     }
 
     /**

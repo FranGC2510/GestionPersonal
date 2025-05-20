@@ -206,7 +206,8 @@ public class GestionTurnosController {
      * Configura el filtro de fecha.
      */
     private void configurarFiltros() {
-        fechaFiltro.valueProperty().addListener((_, _, _) -> aplicarFiltros());
+        fechaFiltro.valueProperty().addListener((_,
+                                                 _, _) -> aplicarFiltros());
     }
 
     /**

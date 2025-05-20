@@ -1,13 +1,18 @@
 # GestorRH. Gestor de Personal y Turnos Empresariales
 
-Aplicación de escritorio en Java que permite gestionar empresas, empleados, turnos y ausencias.  
-Incluye autenticación jerárquica, asignación de roles y persistencia en base de datos MySQL.
-
 ---
 
 ## Descripción
 
-El proyecto consiste en el desarrollo de una aplicación, **GestorRH**, para la gestión de personal dentro de una o varias empresas. Está centrado en la administración eficiente de empleados, horarios laborales y solicitudes de ausencia, permitiendo una visión estructurada según el rol del usuario.
+**GestorRH** es una aplicación de escritorio desarrollada en **Java** orientada a la **gestión integral de personal y recursos humanos** dentro de una empresa. Su objetivo principal es facilitar la administración de empleados, la planificación de turnos de trabajo y el control de ausencias, todo ello a través de una interfaz amigable y profesional.
+
+El acceso al sistema parte del **registro de la empresa**, que se convierte en el único tipo de usuario con permisos administrativos globales. Una vez autenticada, la empresa puede realizar operaciones como dar de alta empleados, asignarles roles (empleado o supervisor), gestionar sus horarios laborales y registrar o validar ausencias.
+
+La aplicación cuenta con una **interfaz gráfica desarrollada en JavaFX**, diseñada para ofrecer una experiencia intuitiva y fluida. El sistema sigue una **arquitectura en capas** basada en los patrones **MVC (Modelo-Vista-Controlador)** y **DAO (Data Access Object)**, lo que garantiza un diseño modular, mantenible y escalable.
+
+En cuanto a la persistencia, se utiliza **MySQL** como sistema gestor de base de datos, con una estructura relacional que refleja fielmente las conexiones entre las distintas entidades: empresas, empleados, turnos y ausencias. Estas relaciones se modelan mediante **claves foráneas** y se optimizan mediante el uso de **consultas JOIN** para obtener información contextualizada.
+
+En definitiva, **GestorRH** representa una solución **robusta y extensible** para empresas que buscan centralizar y optimizar la gestión de su plantilla de personal, con una base sólida tanto a nivel técnico como funcional.
 
 ### Tipos de Usuarios
 
@@ -203,11 +208,11 @@ La base de datos `gestion_plantillas` utiliza el conjunto de caracteres UTF-8 y 
 **Estado**: En desarrollo activo
 
 **Pendiente**:
-- Exportación de informes
-- Notificaciones por email
-- Sistema de fichaje
-- Calendario visual de turnos
-- Implementación de login para más usuarios (empleados y supervisores)
+- **Exportación de informes**: Permite generar y guardar reportes detallados sobre la gestión de personal y turnos en formatos comunes como PDF o Excel, facilitando el análisis y la presentación de datos a la dirección o clientes. 
+- **Notificaciones por email**: Envía alertas automáticas a empleados y supervisores sobre eventos importantes, como nuevos turnos asignados, cambios o recordatorios, mejorando la comunicación y reduciendo errores.
+- **Sistema de fichaje**: Implementa un mecanismo para que los empleados registren su entrada y salida en el sistema, proporcionando un control preciso del tiempo trabajado y facilitando el cálculo de horas y asistencia.
+- **Calendario visual de turnos**: Integra una interfaz gráfica tipo calendario que muestra de forma clara y sencilla los turnos asignados a cada empleado, facilitando la planificación y consulta rápida de horarios.
+- **Implementación de login para más usuarios (empleados y supervisores)**: Amplía el sistema de autenticación para soportar múltiples perfiles de usuario con distintos niveles de acceso y permisos, asegurando que cada rol pueda acceder solo a las funciones que le corresponden.
 
 ---
 ## Autor

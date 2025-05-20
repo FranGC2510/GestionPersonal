@@ -244,9 +244,7 @@ public class GestionEmpleadosController {
         Dialog<ButtonType> dialog = crearDialogo(titulo, headerText, dialogPane);
         EditarEmpleadosController controller = configurarControlador(loader, dialogPane, empleado);
 
-        dialog.showAndWait()
-            .filter(response -> response == ButtonType.OK)
-            .ifPresent(response -> procesarResultadoDialog(controller, empleado));
+        dialog.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> procesarResultadoDialog(controller, empleado));
     }
 
     /**
@@ -273,9 +271,7 @@ public class GestionEmpleadosController {
      * @param empleado Empleado a editar
      * @return Controlador configurado
      */
-    private EditarEmpleadosController configurarControlador(FXMLLoader loader, 
-                                                          DialogPane dialogPane, 
-                                                          Empleado empleado) {
+    private EditarEmpleadosController configurarControlador(FXMLLoader loader, DialogPane dialogPane, Empleado empleado) {
         EditarEmpleadosController controller = loader.getController();
         controller.setDialogPane(dialogPane);
         controller.setEmpresa(empresaActual);
@@ -322,12 +318,11 @@ public class GestionEmpleadosController {
      * @param empleadoOriginal Empleado original
      * @throws DAOException Si hay un error en la base de datos
      */
-    private void procesarEmpleadoEditado(Empleado empleadoActualizado, 
-                                       Empleado empleadoOriginal) throws DAOException {
+    private void procesarEmpleadoEditado(Empleado empleadoActualizado, Empleado empleadoOriginal) throws DAOException {
         empleadoDAO.update(empleadoActualizado);
-        int index = empleados.indexOf(empleadoOriginal);
-        if (index >= 0) {
-            empleados.set(index, empleadoActualizado);
+        int i = empleados.indexOf(empleadoOriginal);
+        if (i >= 0) {
+            empleados.set(i, empleadoActualizado);
         }
     }
 
