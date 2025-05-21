@@ -334,9 +334,7 @@ public class GestionAusenciasController {
      * @return Controlador configurado
      * @throws DAOException Si hay error al cargar los empleados
      */
-    private EditarAusenciaController configurarControladorDialog(FXMLLoader loader, 
-                                                               DialogPane dialogPane, 
-                                                               Ausencia ausencia) throws DAOException {
+    private EditarAusenciaController configurarControladorDialog(FXMLLoader loader, DialogPane dialogPane, Ausencia ausencia) throws DAOException {
         EditarAusenciaController controller = loader.getController();
         controller.setDialogPane(dialogPane);
         controller.setEmpleados(FXCollections.observableArrayList(
