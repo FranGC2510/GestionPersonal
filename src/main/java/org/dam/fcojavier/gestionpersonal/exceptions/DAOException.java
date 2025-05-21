@@ -4,7 +4,7 @@ import org.dam.fcojavier.gestionpersonal.enums.DAOErrorTipo;
 /**
  * Excepción personalizada para operaciones DAO
  */
-public class DAOException extends RuntimeException {
+public class DAOException extends Exception {
     private final DAOErrorTipo error;
     public DAOException(String message, DAOErrorTipo error) {
         super(message);
